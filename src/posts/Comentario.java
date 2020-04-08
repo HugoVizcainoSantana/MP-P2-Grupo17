@@ -1,0 +1,3 @@
+package posts;
+
+class Comentario{}
