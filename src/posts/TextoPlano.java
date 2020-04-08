@@ -1,3 +1,3 @@
 package posts;
 
-class TextoPlano{}
+class TextoPlano extends EntradaGenerica{}

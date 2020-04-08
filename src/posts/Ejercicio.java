@@ -1,3 +1,3 @@
 package posts;
 
-class Ejercicio{}
+class Ejercicio extends EntradaGenerica{}

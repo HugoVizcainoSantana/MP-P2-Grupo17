@@ -1,3 +1,4 @@
 package posts;
 
-class Entrada{}
+class Entrada extends EntradaGenerica{
+}

@@ -1,3 +1,3 @@
 package posts;
 
-class Encuesta{}
+class Encuesta extends EntradaGenerica{}
