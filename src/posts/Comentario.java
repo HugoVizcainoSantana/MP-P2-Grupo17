@@ -11,11 +11,12 @@ private int puntuacion;
         this.texto = texto;
     }
     public boolean votar (int valor, Usuario usuarioComent, Usuario usuarioVoto){
-        if(usuarioVoto != usuarioComent){
+        if(usuarioVoto.getnombre().equals(usuarioComent.getnombre())){
+            return false;
+        }else
             puntuacion = puntuacion + valor;
             return true;
-        }else
-            return false;
+            
     }
 
 
