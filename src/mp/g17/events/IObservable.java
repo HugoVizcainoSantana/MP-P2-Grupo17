@@ -1,3 +1,5 @@
+package mp.g17.events;
+
 import java.util.List;
 
 public interface IObservable<E> {

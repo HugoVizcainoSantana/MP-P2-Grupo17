@@ -1,6 +1,8 @@
-package posts;
+package mp.g17.posts;
 
-class TextoPlano extends EntradaGenerica{
+import mp.g17.posts.EntradaGenerica;
+
+class TextoPlano extends EntradaGenerica {
 
 
     @Override

@@ -1,7 +1,11 @@
-package posts;
+package mp.g17.posts;
 
-class Entrada extends EntradaGenerica{
- private   int i;
+import java.util.ArrayList;
+
+class Encuesta extends EntradaGenerica {
+
+    private ArrayList<String> respuestas = new ArrayList<>();
+
 
     @Override
     public void verificar(boolean resultado) {
@@ -16,5 +20,13 @@ class Entrada extends EntradaGenerica{
     @Override
     public boolean votar(int valor) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public ArrayList<String> getRespuestas() {
+        return respuestas;
+    }
+
+    public void setRespuestas(ArrayList<String> respuestas) {
+        this.respuestas = respuestas;
     }
 }

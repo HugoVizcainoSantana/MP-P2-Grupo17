@@ -1,6 +1,6 @@
-package posts;
+package mp.g17.posts;
 
-class Ejercicio extends EntradaGenerica{
+public class Ejercicio extends EntradaGenerica {
 
 private String solucion;
 
@@ -20,4 +20,11 @@ private String solucion;
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public String getSolucion() {
+        return solucion;
+    }
+
+    public void setSolucion(String solucion) {
+        this.solucion = solucion;
+    }
 }
