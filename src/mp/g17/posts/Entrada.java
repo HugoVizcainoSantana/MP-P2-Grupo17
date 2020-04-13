@@ -1,22 +1,29 @@
 package mp.g17.posts;
 
+import mp.g17.users.Usuario;
+
 public class Entrada extends EntradaGenerica {
-    private int i;
+    private int puntuacion;
 
     @Override
-    public void verificar(boolean resultado) {
+    public void verify(boolean resultado) {
         setVerificada(resultado);
     }
     
     @Override
-    public boolean comentar(Comentario texto) {
+    public boolean comment(Comentario texto) {
         getCommentList().add(texto);
         return true;
     }
 
     @Override
-    public boolean votar(int valor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public boolean vote(int valor, Usuario usuarioComent, Usuario usuarioVoto) {
+        if (usuarioVoto.getEmail().equals(usuarioComent.getEmail())) {
+            return false;
+        } else {
+            puntuacion = puntuacion + valor;
+            return true;
+        }
+        }
 
 }

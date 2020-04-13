@@ -1,6 +1,7 @@
 package mp.g17.posts;
 
 import java.util.List;
+import mp.g17.users.Usuario;
 
 public abstract class EntradaGenerica {
 
@@ -22,11 +23,11 @@ public abstract class EntradaGenerica {
         this.commentList = commentList;
     }
 
-    public abstract void verificar(boolean resultado);
+    public abstract void verify(boolean resultado);
 
-    public abstract boolean comentar(Comentario texto);
+    public abstract boolean comment(Comentario texto);
 
-    public abstract boolean votar(int valor);
+    public abstract boolean vote(int valor, Usuario usuarioComent, Usuario usuarioVoto);
 
 
     public String getTitulo() {
