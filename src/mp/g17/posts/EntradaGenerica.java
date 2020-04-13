@@ -1,19 +1,30 @@
 package mp.g17.posts;
 
+import java.util.List;
+
 public abstract class EntradaGenerica {
 
     private int puntuacion;
     private String titulo;
     private String texto;
-    private boolean verificada;
+    private boolean verificada = false;
+    private List<Comentario> commentList;
 
     public int getPuntuacion() {
         return puntuacion;
     }
 
+    public List<Comentario> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<Comentario> commentList) {
+        this.commentList = commentList;
+    }
+
     public abstract void verificar(boolean resultado);
 
-    public abstract boolean comentar(String texto);
+    public abstract boolean comentar(Comentario texto);
 
     public abstract boolean votar(int valor);
 

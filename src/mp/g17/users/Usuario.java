@@ -14,6 +14,7 @@ public abstract class Usuario implements IObserver<EventoEntradaCreada> {
     protected String email;
     protected String password;
     protected List<Subforo> suscribedSubforos;
+    protected List<String> notifications;
 
     public Usuario(String firstname, String lastname, String alias, String email, String password) {
         this.firstname = firstname;
@@ -21,6 +22,10 @@ public abstract class Usuario implements IObserver<EventoEntradaCreada> {
         this.alias = alias;
         this.email = email;
         this.password = password;
+    }
+
+    public List<String> getNotifications() {
+        return notifications;
     }
 
     public String getFirstname() {
