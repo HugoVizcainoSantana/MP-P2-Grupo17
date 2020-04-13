@@ -13,8 +13,6 @@ public abstract class Usuario implements IObserver<EventoEntradaCreada> {
     protected String alias;
     protected String email;
     protected String password;
-    protected List<Subforo> suscribedSubforos;
-    protected List<String> notifications;
 
     public Usuario(String firstname, String lastname, String alias, String email, String password) {
         this.firstname = firstname;
