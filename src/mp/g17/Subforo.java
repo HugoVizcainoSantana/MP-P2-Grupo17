@@ -11,7 +11,7 @@ import mp.g17.posts.EntradaGenerica;
 public class Subforo implements IObservable<EventoEntradaCreada> {
     private String name;
     private List<IObserver<EventoEntradaCreada>> usersForo;
-    private List<EntradaGenerica> inputSubforo;
+    private List<EntradaGenerica> posts;
 
     public String getName() {
         return name;
@@ -26,7 +26,8 @@ public class Subforo implements IObservable<EventoEntradaCreada> {
     }
 
     public void addInput (EntradaGenerica input){
-        inputSubforo.add(input);
+        posts.add(input);
+        notifyObservers(new EventoEntradaCreada(this,input));
     }
 
     public void deleteUser (Usuario subs){
@@ -34,17 +35,16 @@ public class Subforo implements IObservable<EventoEntradaCreada> {
     }
 
     public void deleteInput (EntradaGenerica input){
-        inputSubforo.remove(input);
+        posts.remove(input);
     }
-
-    private void notifyUsers (){
-        usersForo.forEach(user -> user.update(new EventoEntradaCreada(this,null)));
-    }
-
 
     @Override
     public List<IObserver<EventoEntradaCreada>> getObservers() {
         return usersForo;
+    }
+
+    public List<EntradaGenerica> getPosts() {
+        return posts;
     }
 }
 
