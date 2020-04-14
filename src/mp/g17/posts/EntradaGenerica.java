@@ -4,7 +4,8 @@ import java.util.List;
 import mp.g17.users.Usuario;
 
 public abstract class EntradaGenerica {
-
+    
+    private Usuario creador;
     private int points;
     private String title;
     private String text;
@@ -23,11 +24,23 @@ public abstract class EntradaGenerica {
         this.commentList = commentList;
     }
 
-    public abstract void verify(boolean resultado);
+    public void verify(boolean resultado) {
+        setVerified(resultado);
+    }
 
-    public abstract boolean comment(Comentario texto);
+    public boolean comment(Comentario texto) {
+        getCommentList().add(texto);
+        return true;
+    }
 
-    public abstract boolean vote(int valor, Usuario usuarioComent, Usuario usuarioVoto);
+    public boolean vote(int valor, Usuario usuarioVoto) {
+        if (usuarioVoto.getEmail().equals(creador.getEmail())) {
+            return false;
+        } else {
+            points = points + valor;
+            return true;
+        }
+        }
 
 
     public String getTitle() {
