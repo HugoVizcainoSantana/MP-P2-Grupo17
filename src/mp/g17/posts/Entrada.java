@@ -7,9 +7,9 @@ public class Entrada extends EntradaGenerica {
 
     @Override
     public void verify(boolean resultado) {
-        setVerificada(resultado);
+        setVerified(resultado);
     }
-    
+
     @Override
     public boolean comment(Comentario texto) {
         getCommentList().add(texto);

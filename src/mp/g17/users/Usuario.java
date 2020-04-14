@@ -108,10 +108,13 @@ public abstract class Usuario implements IObserver<EventoEntradaCreada> {
                 .add("alias='" + alias + "'")
                 .add("email='" + email + "'")
                 .add("password='" + password + "'")
-                .add("suscribedTopics=" + suscribedSubforos)
+                .add("suscribedSubforos=" + suscribedSubforos)
                 .toString();
     }
 
     @Override
-    abstract public void update(EventoEntradaCreada event);
+    public void update(EventoEntradaCreada event){
+        System.out.println("Se ha creado una nueva entrada.");
+        System.out.println(event);
+    }
 }

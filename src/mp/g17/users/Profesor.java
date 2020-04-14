@@ -10,6 +10,7 @@ public class Profesor extends Usuario {
 
     @Override
     public void update(EventoEntradaCreada event) {
-        System.out.println("event = " + event);
+        System.out.println("Soy el Profesor " + email + " que ha recibido una notificacion de post creado");
+        super.update(event);
     }
 }

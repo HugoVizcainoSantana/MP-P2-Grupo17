@@ -5,14 +5,14 @@ import mp.g17.users.Usuario;
 
 public abstract class EntradaGenerica {
 
-    private int puntuacion;
-    private String titulo;
-    private String texto;
-    private boolean verificada = false;
+    private int points;
+    private String title;
+    private String text;
+    private boolean verified = false;
     private List<Comentario> commentList;
 
-    public int getPuntuacion() {
-        return puntuacion;
+    public int getPoints() {
+        return points;
     }
 
     public List<Comentario> getCommentList() {
@@ -30,31 +30,31 @@ public abstract class EntradaGenerica {
     public abstract boolean vote(int valor, Usuario usuarioComent, Usuario usuarioVoto);
 
 
-    public String getTitulo() {
-        return titulo;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getTexto() {
-        return texto;
+    public String getText() {
+        return text;
     }
 
-    public void setTexto(String texto) {
-        this.texto = texto;
+    public void setText(String text) {
+        this.text = text;
     }
 
-    public boolean isVerificada() {
-        return verificada;
+    public boolean isVerified() {
+        return verified;
     }
 
-    public void setVerificada(boolean verificada) {
-        this.verificada = verificada;
+    public void setVerified(boolean verified) {
+        this.verified = verified;
     }
 
-    public void setPuntuacion(int puntuacion) {
-        this.puntuacion = puntuacion;
+    public void setPoints(int points) {
+        this.points = points;
     }
 }
