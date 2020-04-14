@@ -1,17 +1,17 @@
 package mp.g17.posts;
 
-import java.util.ArrayList;
+import java.util.List;
 
 class Encuesta extends EntradaGenerica {
 
-    private ArrayList<String> respuestas = new ArrayList<>();
+    private List<String> respuestas;
+    private votos hashmap
 
-
-    public ArrayList<String> getRespuestas() {
+    public List<String> getRespuestas() {
         return respuestas;
     }
 
-    public void setRespuestas(ArrayList<String> respuestas) {
+    public void setRespuestas(List<String> respuestas) {
         this.respuestas = respuestas;
     }
 }

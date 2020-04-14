@@ -3,7 +3,8 @@ package mp.g17.posts;
 import mp.g17.users.Usuario;
 
 class Comentario {
-
+    
+    private Usuario creador;
     private String texto;
     private int puntuacion;
 
@@ -19,11 +20,15 @@ class Comentario {
         this.texto = texto;
     }
 
-    public boolean votar(int valor, Usuario usuarioComent, Usuario usuarioVoto) {
-        if (usuarioVoto.getEmail().equals(usuarioComent.getEmail())) {
+    public boolean votar(boolean valor, Usuario usuarioVoto) {
+        if (usuarioVoto.getEmail().equals(creador.getEmail())) {
             return false;
-        } else {
-            puntuacion = puntuacion + valor;
+        }
+        if(valor = true){
+            puntuacion = puntuacion++;
+            return true;
+        }else{
+            puntuacion = puntuacion--;
             return true;
         }
     }
