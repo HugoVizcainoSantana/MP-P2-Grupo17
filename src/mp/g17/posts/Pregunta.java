@@ -13,22 +13,35 @@ import java.util.Scanner;
  * @author usuario
  */
 public class Pregunta {
-    private String enunciado;
-    private List<String> respuesta;
+    private String title;
+    private List<String> respuestas;
     
     
-    public List<String> createQuestion (){
-        String opcion;
-        boolean correct = false;
-        while(!correct){
-            System.out.println("Introduzca el numero de respuestas");
-            Scanner entrada = new Scanner(System.in);
-            int numero = entrada.nextInt();
-            if(numero <= 4)
-                correct = true;
+    public void createOptions ( int numRespuestas){
+        String option;
+        for(int i = 0; i <= numRespuestas;i++){
+            System.out.println("introduzca la opción");
+            Scanner enter = new Scanner(System.in);
+            option = enter.nextLine();
+            respuestas.add(option);
         }
-        
-        respuesta.add(opcion);
+
+    }
+
+    public String getEnunciado() {
+        return title;
+    }
+
+    public void setEnunciado(String enunciado) {
+        this.title = enunciado;
+    }
+
+    public List<String> getRespuestas() {
+        return respuestas;
+    }
+
+    public void setRespuestas(List<String> respuestas) {
+        this.respuestas = respuestas;
     }
     
     
