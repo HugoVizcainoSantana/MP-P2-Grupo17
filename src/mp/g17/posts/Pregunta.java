@@ -17,7 +17,7 @@ public class Pregunta {
     private List<String> respuestas;
     
     
-    public void createOptions ( int numRespuestas){
+    public List<String> createOptions ( int numRespuestas){
         String option;
         for(int i = 0; i <= numRespuestas;i++){
             System.out.println("introduzca la opción");
@@ -25,7 +25,7 @@ public class Pregunta {
             option = enter.nextLine();
             respuestas.add(option);
         }
-
+        return respuestas;
     }
 
     public String getEnunciado() {
@@ -38,10 +38,6 @@ public class Pregunta {
 
     public List<String> getRespuestas() {
         return respuestas;
-    }
-
-    public void setRespuestas(List<String> respuestas) {
-        this.respuestas = respuestas;
     }
     
     

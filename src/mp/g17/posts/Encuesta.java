@@ -6,7 +6,6 @@ import java.util.List;
 class Encuesta extends EntradaGenerica {
 
     private List<String> respuestas;
-    HashMap<String, String> respuestasUsuarios = new HashMap<String, String>();
 
     public List<String> getRespuestas() {
         return respuestas;
