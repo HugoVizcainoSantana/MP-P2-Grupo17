@@ -38,7 +38,7 @@ public abstract class EntradaGenerica {
             return false;
         } else {
             points = points + valor;
-            return true;
+            return true; 
         }
         }
 
