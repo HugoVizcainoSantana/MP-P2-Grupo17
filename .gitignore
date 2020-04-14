@@ -1,5 +1,6 @@
 ### Java template
 # Compiled class file
+out/
 *.class
 
 # Log file
@@ -25,4 +26,5 @@ hs_err_pid*
 
 # Intellij IDEA Files
 .idea/
+*.iml
 
