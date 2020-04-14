@@ -1,6 +1,9 @@
 package mp.g17.posts;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import mp.g17.users.Usuario;
 
 public abstract class EntradaGenerica {
@@ -11,6 +14,8 @@ public abstract class EntradaGenerica {
     private String text;
     private boolean verified = false;
     private List<Comentario> commentList;
+    private Map<Usuario, Boolean> usuariosVotos = new HashMap<>();
+    private int puntuacion;
 
     public int getPoints() {
         return points;
@@ -32,15 +37,29 @@ public abstract class EntradaGenerica {
         getCommentList().add(texto);
         return true;
     }
+    public void votar(boolean valor, Usuario usuarioVoto) {
+        if (usuariosVotos.containsKey(usuarioVoto)) {
+            boolean votoAnterior = usuariosVotos.get(usuarioVoto);
+            if (votoAnterior) {
+                puntuacion--;
+                usuariosVotos.put(usuarioVoto, valor);
+            } else {
+                puntuacion++;
+                usuariosVotos.put(usuarioVoto, valor);
+            }
 
-    public boolean vote(int valor, Usuario usuarioVoto) {
-        if (usuarioVoto.getEmail().equals(creador.getEmail())) {
-            return false;
         } else {
-            points = points + valor;
-            return true; 
+            usuariosVotos.put(usuarioVoto, valor);
         }
+        if(valor){
+            puntuacion++;
+        }else{
+            puntuacion--;
         }
+
+    }
+
+
 
 
     public String getTitle() {
