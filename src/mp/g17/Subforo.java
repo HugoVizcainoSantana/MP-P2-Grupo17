@@ -3,12 +3,14 @@ package mp.g17;
 import java.util.List;
 
 import mp.g17.events.EventoEntradaCreada;
+import mp.g17.events.IObservable;
+import mp.g17.events.IObserver;
 import mp.g17.users.Usuario;
 import mp.g17.posts.EntradaGenerica;
 
-public class Subforo {
+public class Subforo implements IObservable<EventoEntradaCreada> {
     private String name;
-    private List<Usuario> usersForo;
+    private List<IObserver<EventoEntradaCreada>> usersForo;
     private List<EntradaGenerica> inputSubforo;
 
     public String getName() {
@@ -40,5 +42,9 @@ public class Subforo {
     }
 
 
+    @Override
+    public List<IObserver<EventoEntradaCreada>> getObservers() {
+        return usersForo;
+    }
 }
 
