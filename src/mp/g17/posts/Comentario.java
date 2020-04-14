@@ -11,6 +11,14 @@ class Comentario {
         this.texto = texto;
     }
 
+    public String getTexto() {
+        return texto;
+    }
+
+    public void setTexto(String texto) {
+        this.texto = texto;
+    }
+
     public boolean votar(int valor, Usuario usuarioComent, Usuario usuarioVoto) {
         if (usuarioVoto.getEmail().equals(usuarioComent.getEmail())) {
             return false;
