@@ -14,18 +14,18 @@ import java.util.Scanner;
  */
 public class Pregunta {
     private String title;
-    private List<String> respuestas;
+    private List<String> pregunta;
     
     
     public List<String> createOptions ( int numRespuestas){
-        String option;
+        String respuesta;
         for(int i = 0; i <= numRespuestas;i++){
             System.out.println("introduzca la opción");
             Scanner enter = new Scanner(System.in);
-            option = enter.nextLine();
-            respuestas.add(option);
+            respuesta = enter.nextLine();
+            pregunta.add(respuesta);
         }
-        return respuestas;
+        return pregunta;
     }
 
     public String getEnunciado() {
@@ -37,7 +37,7 @@ public class Pregunta {
     }
 
     public List<String> getRespuestas() {
-        return respuestas;
+        return pregunta;
     }
     
     
