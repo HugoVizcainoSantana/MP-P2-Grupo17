@@ -5,45 +5,41 @@ import mp.g17.users.Usuario;
 import java.util.HashMap;
 import java.util.Map;
 
-class Comentario {
+class Comentario implements IVotable {
 
-    private Usuario creador;
-    private String texto;
-    private int puntuacion;
-    private Map<Usuario, Boolean> usuariosVotos = new HashMap<>();
+    private Usuario createdBy;
+    private String text;
+    private int points;
+    private Map<Usuario, Boolean> usersVotes;
 
-    public void comentar(String texto) {
-        this.texto = texto;
+    public Comentario(Usuario createdBy, String text) {
+        this.createdBy = createdBy;
+        this.text = text;
+        this.points = 0;
+        this.usersVotes = new HashMap<>();
     }
 
-    public String getTexto() {
-        return texto;
+    public String getText() {
+        return text;
     }
 
-    public void setTexto(String texto) {
-        this.texto = texto;
+    public void setText(String text) {
+        this.text = text;
     }
 
-    public void votar(boolean valor, Usuario usuarioVoto) {
-            if (usuariosVotos.containsKey(usuarioVoto)) {
-                boolean votoAnterior = usuariosVotos.get(usuarioVoto);
-                if (votoAnterior) {
-                    puntuacion--;
-                    usuariosVotos.put(usuarioVoto, valor);
-                } else {
-                    puntuacion++;
-                    usuariosVotos.put(usuarioVoto, valor);
-                }
+    @Override
+    public Map<Usuario, Boolean> getUsersVotes() {
+        return usersVotes;
+    }
 
-            } else {
-                usuariosVotos.put(usuarioVoto, valor);
-            }
-            if(valor){
-                puntuacion++;
-            }else{
-                puntuacion--;
-            }
+    @Override
+    public int getPoints() {
+        return points;
+    }
 
+    @Override
+    public void setPoints(int points) {
+        this.points = points;
     }
 }
 

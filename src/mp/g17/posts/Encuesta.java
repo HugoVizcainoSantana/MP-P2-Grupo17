@@ -1,47 +1,58 @@
 package mp.g17.posts;
 
+import mp.g17.users.Usuario;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import mp.g17.users.Usuario;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-class Encuesta extends EntradaGenerica {
-    private List<Pregunta> poll;
-    Map<Usuario,Object[][]> answers = new HashMap<>();
-    
-    public void addQuestion(Pregunta question){
-        poll.add(question);
-    }
-    
-    public void deleteQuestion(Pregunta question){
-        poll.remove(question);
-    }
-    
-    public void addUserAnswer(Usuario user,Encuesta poll, Pregunta question){
-        Object[][] a = new Object[][]{ {poll, question} };
-        answers.put(user,a);
-    }
-    
-    public void deleteUserAnswer(Usuario user,Encuesta poll, Pregunta question){
-        Object[][] a = new Object[][]{{poll, question} };
-        answers.remove(user,a);
+public class Encuesta extends EntradaGenerica {
+    private List<PreguntaEncuesta> polls;
+
+    public Encuesta(Usuario createdBy, String title, String text) {
+        super(createdBy, title, text);
+        this.polls = new ArrayList<>();
     }
 
-    public List<Pregunta> getEncuesta() {
-        return poll;
+    public void addQuestion(PreguntaEncuesta question) {
+        polls.add(question);
     }
 
-    public void setEncuesta(List<Pregunta> poll) {
-        this.poll = poll;
+    public void deleteQuestion(PreguntaEncuesta question) {
+        polls.remove(question);
     }
 
-    public Map<Usuario, Object[][]> getRespuestas() {
+    public List<PreguntaEncuesta> getPolls() {
+        return polls;
+    }
+
+    public void setPolls(List<PreguntaEncuesta> polls) {
+        this.polls = polls;
+    }
+
+    public Map<String, Map<String, Long>> getAllAnswersAnonymously() {
+        // Map<Pregunta,Map<RespuestaDada,NumVeces>>
+        Map<String, Map<String, Long>> answers = new HashMap<>();
+        polls.forEach(poll -> answers.put(
+                poll.getQuestion(),
+                poll.getAnswersRegistered()
+                        .values()
+                        .stream()
+                        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+        ));
         return answers;
     }
 
-    public void setRespuestas(Map<Usuario, Object[][]> answers) {
-        this.answers = answers;
+    public Map<String, Map<Usuario, String>> getAllAnswers() {
+        // Map<Pregunta,Map<Usuario,RespuestaDada>>
+        Map<String, Map<Usuario, String>> answers = new HashMap<>();
+        polls.forEach(poll -> answers.put(
+                poll.getQuestion(),
+                poll.getAnswersRegistered()
+        ));
+        return answers;
     }
-    
-    
 }

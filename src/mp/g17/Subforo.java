@@ -1,12 +1,12 @@
 package mp.g17;
 
-import java.util.List;
-
 import mp.g17.events.EventoEntradaCreada;
 import mp.g17.events.IObservable;
 import mp.g17.events.IObserver;
-import mp.g17.users.Usuario;
 import mp.g17.posts.EntradaGenerica;
+import mp.g17.users.Usuario;
+
+import java.util.List;
 
 public class Subforo implements IObservable<EventoEntradaCreada> {
     private String name;
@@ -21,20 +21,20 @@ public class Subforo implements IObservable<EventoEntradaCreada> {
         this.name = nombre;
     }
 
-    public void addUser (Usuario subs){
+    public void addUser(Usuario subs) {
         usersForo.add(subs);
     }
 
-    public void addInput (EntradaGenerica input){
+    public void addInput(EntradaGenerica input) {
         posts.add(input);
-        notifyObservers(new EventoEntradaCreada(this,input));
+        notifyObservers(new EventoEntradaCreada(this, input));
     }
 
-    public void deleteUser (Usuario subs){
+    public void deleteUser(Usuario subs) {
         usersForo.remove(subs);
     }
 
-    public void deleteInput (EntradaGenerica input){
+    public void deleteInput(EntradaGenerica input) {
         posts.remove(input);
     }
 

@@ -3,17 +3,11 @@ package mp.g17.users;
 import mp.g17.Penalizacion;
 import mp.g17.events.EventoEntradaCreada;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
 public class Alumno extends Usuario {
-    private boolean tienePenalizacionActiva;
-    private Penalizacion penalizacion;
+    private Penalizacion strike;
 
     public Alumno(String firstname, String lastname, String alias, String email, String password) {
         super(firstname, lastname, alias, email, password);
-        tienePenalizacionActiva=false;
     }
 
     @Override
@@ -21,12 +15,13 @@ public class Alumno extends Usuario {
         System.out.println("Soy el Alumno " + email + " que ha recibido una notificacion de post creado");
         super.update(event);
     }
-    public void penalizar (){
-        tienePenalizacionActiva=true;
-        penalizacion= new Penalizacion(new GregorianCalendar());
 
+    public Penalizacion getStrike() {
+        return strike;
     }
-    public boolean estaPenalizado(){
-        return tienePenalizacionActiva;
+
+    public void setStrike(Penalizacion strike) {
+        System.out.println("El alumno " + email + " esta recibiendo una penalizacion de " + strike.getPenalizedBy().getEmail() + ".\n\tMotivo: " + strike.getReason());
+        this.strike = strike;
     }
 }

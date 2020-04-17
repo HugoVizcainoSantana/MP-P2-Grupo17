@@ -113,7 +113,7 @@ public abstract class Usuario implements IObserver<EventoEntradaCreada> {
     }
 
     @Override
-    public void update(EventoEntradaCreada event){
+    public void update(EventoEntradaCreada event) {
         System.out.println("Se ha creado una nueva entrada.");
         System.out.println(event);
     }
