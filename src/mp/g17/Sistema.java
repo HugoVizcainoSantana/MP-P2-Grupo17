@@ -78,7 +78,7 @@ public class Sistema implements Serializable {
             users.put(mail, user);
             return true;
         } else {
-            System.out.println("No es un email valido");
+                System.out.println("El email introducido NO es un email valido");
             return false;
         }
 
