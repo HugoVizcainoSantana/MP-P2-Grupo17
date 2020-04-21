@@ -13,6 +13,10 @@ public class Subforo implements IObservable<EventoEntradaCreada> {
     private List<IObserver<EventoEntradaCreada>> usersForo;
     private List<EntradaGenerica> posts;
 
+    public Subforo (String name){
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }

@@ -18,7 +18,6 @@ public class Sistema {
 
     private static Map<String, Usuario> users = new HashMap<>();
     private static Usuario currentUser = null;
-    private static List<Usuario> registeredUsers = new ArrayList<>();
     private static List<Subforo> subforums = new ArrayList<>();
 
     public static void main(String[] args) {
@@ -50,14 +49,14 @@ public class Sistema {
         Usuario user = null;
             if(mail.contains("@alumnos.urjc.es")){
                 user = new Alumno(name, surname, alias, mail, password);
-                registeredUsers.add(user);
+                users.put(mail,user);
                 return true;
             }else if(mail.contains("@urjc.es")){
                 user = new Profesor(name, surname, alias, mail, password);
-                registeredUsers.add(user);
+                users.put(mail,user);
                 return true;
             }else{
-                System.out.println("No es un email valido");
+                System.out.println("El email introducido NO es un email valido");
                 return false;
             }
             
@@ -65,8 +64,7 @@ public class Sistema {
     }
     
     public static boolean createSubforum(String name){
-        Subforo forum = null;
-        forum.setName(name);
+        Subforo forum = new Subforo (name);
         subforums.add(forum);
         return true;
     }
