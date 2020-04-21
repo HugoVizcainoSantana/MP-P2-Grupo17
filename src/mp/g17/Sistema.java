@@ -1,5 +1,6 @@
 package mp.g17;
 
+import mp.g17.users.Administrador;
 import mp.g17.users.Alumno;
 import mp.g17.users.Profesor;
 import mp.g17.users.Usuario;
@@ -19,24 +20,39 @@ public class Sistema implements Serializable {
     private static Map<String, Usuario> users = new HashMap<>();
     private static Usuario currentUser = null;
     private static List<Subforo> subforums = new ArrayList<>();
+    private static Administrador administrador;
 
     public static void main(String[] args) {
         System.out.println("Inicializando sistema!");
+        if(registerUser("Juan","Perez","12345","j.perez@urjc.es","jPerez")){
+            System.out.println("Profesor Juan Registrado");
+        }
+
+        if(stablishAdmin("admin1","12345")){
+            System.out.println("Administrador asignado al sistema");
+        }
+        if(registerUser("Pedro","Jimenez","12345","pjimenez@alumnos.urjc.es","pedrito")) {
+            System.out.println("Alumno Borja Registrado");
+        }
+
+        if(registerUser("Borja","Castro","12345","b.castro.2018@alumnos.urjc.es","bcastro")) {
+            System.out.println("Alumno Borja Registrado");
+        }
+
         if (registerUser("Hugo", "Vizcaino", "hugo1234", CORREO_HUGO, "hVizcaino")) {
-            System.out.println("Usuario registrado correctamente");
+            System.out.println("Alumno registrado correctamente");
         }
         if (login(CORREO_HUGO, "hugo1235")) {
             System.out.println("Se ha iniciado sesion con las credenciales " + CORREO_HUGO + ":hugo1235");
-        } else {
-            System.out.println("No se ha podido iniciar sesion con las credenciales " + CORREO_HUGO + ":hugo1235");
         }
         if (login(CORREO_HUGO, "hugo1234")) {
             System.out.println("Se ha iniciado sesion con las credenciales " + CORREO_HUGO + ":hugo1234");
-        } else {
-            System.out.println("No se ha podido iniciar sesion con las credenciales " + CORREO_HUGO + ":hugo1235");
         }
 
         System.out.println("El usuario actual (con sesion iniciada) es:\n" + currentUser);
+
+        showRegisteredUsers();
+
     }
 
 
@@ -50,7 +66,7 @@ public class Sistema implements Serializable {
                 System.out.println("Login correcto! Credenciales: " + auth);
                 return true;
             }
-            System.err.println("El correo recibido no existe");
+            System.err.println("Credenciales erroneos para "+ auth);
         }
 
         return false;
@@ -61,6 +77,11 @@ public class Sistema implements Serializable {
         currentUser = null;
         return true;
     }
+    private static boolean stablishAdmin(String mail, String password) {
+        administrador= new Administrador(mail,password);
+        return true;
+    }
+
 
     public static boolean registerUser(String name, String surname, String password, String mail, String alias) {
         Usuario user;
@@ -82,6 +103,13 @@ public class Sistema implements Serializable {
             return false;
         }
 
+    }
+    public static void showRegisteredUsers(){
+
+        System.out.println("Usuarios Registrados: ");
+        for (String email: users.keySet()){
+            System.out.println(email);
+        }
     }
 
     public static boolean createSubforum(String name) {

@@ -1,5 +1,6 @@
 package mp.g17.posts;
 
+import mp.g17.users.Profesor;
 import mp.g17.users.Usuario;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 public class Encuesta extends EntradaGenerica {
     private List<PreguntaEncuesta> polls;
 
-    public Encuesta(Usuario createdBy, String title, String text) {
+    public Encuesta(Profesor createdBy, String title, String text) {
         super(createdBy, title, text);
         this.polls = new ArrayList<>();
     }
