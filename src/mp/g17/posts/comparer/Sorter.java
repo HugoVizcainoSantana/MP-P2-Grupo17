@@ -31,14 +31,14 @@ public class Sorter <O> {
         
         O[] items = (O[]) votes.toArray();
         for (int i = 0; i < items.length; i++) { // Asumir de partida que el valor menor de la parte aun no ordenada del array esta en la primera posicion de la parte aun no ordenada
-            int notOrderedLowerValue = i;  // Recorrer el resto del vector para encontrar otro menor
+            int minVal = i;  // Recorrer el resto del vector para encontrar otro menor
             for (int j = i + 1; j < items.length; j++) // Si se encuentra un valor menor en la posicion j
-                if (performComparison(items[j], items[notOrderedLowerValue]) < 0)
-                    notOrderedLowerValue = j; // nueva posicion del menor jSi el valor de la posicion i no estaba en su sitio porque hemos encontrado en una posicion distinta otro valor aun menor intercambiar las posiciones
-            if (i != notOrderedLowerValue) {
+                if (performComparison(items[j], items[minVal]) < 0)
+                    minVal = j; // nueva posicion del menor jSi el valor de la posicion i no estaba en su sitio porque hemos encontrado en una posicion distinta otro valor aun menor intercambiar las posiciones
+            if (i != minVal) {
                 O aux = items[i];
-                items[i] = items[notOrderedLowerValue];
-                items[notOrderedLowerValue] = aux;
+                items[i] = items[minVal];
+                items[minVal] = aux;
             }
         }
     }
