@@ -5,7 +5,7 @@ import mp.g17.users.Usuario;
 import java.util.HashMap;
 import java.util.Map;
 
-class Comentario implements IVotable {
+public class Comentario implements IVotable {
 
     private Usuario createdBy;
     private String text;

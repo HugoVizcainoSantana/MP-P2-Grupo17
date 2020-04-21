@@ -16,6 +16,12 @@ public class Subforo implements IObservable<EventoEntradaCreada> {
     public Subforo(String name) {
         this.name = name;
     }
+    
+    public void printPosts() {
+        for (EntradaGenerica post : posts) {
+            System.out.println(post.toString());
+        }
+    }
 
     public String getName() {
         return name;
