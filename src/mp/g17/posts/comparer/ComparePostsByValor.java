@@ -5,18 +5,18 @@
  */
 package mp.g17.posts.comparer;
 
-import mp.g17.posts.Comentario;
+import mp.g17.posts.EntradaGenerica;
 
-
+import java.util.Comparator;
 
 /**
  *
  * @author usuario
  */
-public class CompareComments implements Comparer<Comentario> {
+public class ComparePostsByValor implements Comparator<EntradaGenerica> {
 
     @Override
-    public int compare(Comentario x, Comentario y) {
+    public int compare(EntradaGenerica x, EntradaGenerica y) {
         if(x.getPoints() < y.getPoints()) return -1;
         if(x.getPoints() == y.getPoints()) return 0;
         if(x.getPoints() > y.getPoints()) return 1;

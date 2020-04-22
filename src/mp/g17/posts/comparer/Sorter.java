@@ -29,12 +29,11 @@ public class Sorter <O> {
         return comparer.compare(x, y);
     }
     
-    Sorter<EntradaGenerica> postSorter = new Sorter<>(new ComparePosts());
-    Sorter<Comentario> comentSorter = new Sorter<>(new CompareComments());
+    //Sorter<EntradaGenerica> postSorter = new Sorter<>(new ComparePostsByValor());
+    //Sorter<Comentario> comentSorter = new Sorter<>(new CompareCommentsByValor());
     
     
     public void sort(List<O> votes) {
-        
         O[] items = (O[]) votes.toArray();
         for (int i = 0; i < items.length; i++) { // Asumir de partida que el valor menor de la parte aun no ordenada del array esta en la primera posicion de la parte aun no ordenada
             int minVal = i;  // Recorrer el resto del vector para encontrar otro menor

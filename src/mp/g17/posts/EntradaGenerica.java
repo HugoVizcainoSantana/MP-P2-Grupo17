@@ -2,10 +2,7 @@ package mp.g17.posts;
 
 import mp.g17.users.Usuario;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class EntradaGenerica implements IVotable {
 
@@ -16,6 +13,7 @@ public abstract class EntradaGenerica implements IVotable {
     private boolean verified;
     private List<Comentario> commentList;
     private Map<Usuario, Boolean> usersVotes;
+    private Date creationDate;
 
     public EntradaGenerica(Usuario createdBy, String title, String text) {
         this.createdBy = createdBy;
@@ -25,6 +23,7 @@ public abstract class EntradaGenerica implements IVotable {
         this.verified = false;
         this.commentList = new ArrayList<>();
         this.usersVotes = new HashMap<>();
+        creationDate= new Date();
     }
 
     public List<Comentario> getCommentList() {
@@ -81,5 +80,9 @@ public abstract class EntradaGenerica implements IVotable {
     @Override
     public void setPoints(int points) {
         this.points = points;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
     }
 }

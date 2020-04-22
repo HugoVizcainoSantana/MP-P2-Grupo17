@@ -7,10 +7,7 @@ import mp.g17.users.Usuario;
 import mp.g17.utils.LoggerUtils;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
@@ -35,7 +32,7 @@ public class Sistema implements Serializable {
             LOGGER.info("Administrador asignado al sistema");
         }
         if (registerUser("Pedro", "Jimenez", "12345", "pjimenez@alumnos.urjc.es", "pedrito")) {
-            LOGGER.info("Alumno Borja Registrado");
+            LOGGER.info("Alumno Pedro Registrado");
         }
 
         if (registerUser("Borja", "Castro", "12345", "b.castro.2018@alumnos.urjc.es", "bcastro")) {
@@ -55,6 +52,21 @@ public class Sistema implements Serializable {
         LOGGER.info(String.format("El usuario actual (con sesion iniciada) es:%s", currentUser));
 
         showRegisteredUsers();
+
+        LOGGER.info("Creacion de subforos");
+        if(createSubforum("Notas de la practica")){
+            LOGGER.info("Subforo creado");
+        }
+        if(createSubforum("Preguntas practica")){
+            LOGGER.info("Subforo creado");
+        }
+
+        showSubforumsAvaliables();
+
+
+
+
+
 
         logout();
     }
@@ -123,12 +135,37 @@ public class Sistema implements Serializable {
         };
         LOGGER.fine(supplier);
     }
+    public static void showSubforumsAvaliables(){
+        Supplier<String> supplier = () -> {
+            StringBuilder sb = new StringBuilder();
+            sb.append("Listando  Subforos Disponibles...");
+            for (Subforo subforo: subforums) {
+                sb.append("\n\t").append(String.format("Nombre de Subforo %35s -> %s", subforo.getName(), subforo.getPosts()));
+            }
+            return sb.toString();
+        };
+        LOGGER.fine(supplier);
+    }
+
 
     public static boolean createSubforum(String name) {
         Subforo forum = new Subforo(name);
         subforums.add(forum);
+        LOGGER.info("Creando subforo "+ name);
         return true;
     }
+    public static Subforo chooseSubforum(String name){
+        for(Subforo subforo: subforums) {
+            if (subforo.getName().equals(name)) {
+                return subforo;
+            }
+
+            }
+        LOGGER.warning("No existe subforo con ese nombre");
+        return null;
+        }
+
+
 
     private static boolean save(Sistema system) {
         try (FileOutputStream file = new FileOutputStream("forum.obj")) {
