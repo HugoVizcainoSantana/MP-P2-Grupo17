@@ -6,6 +6,8 @@
 package mp.g17.posts.comparer;
 
 import java.util.List;
+import mp.g17.posts.Comentario;
+import mp.g17.posts.EntradaGenerica;
 
 /**
  *
@@ -26,6 +28,10 @@ public class Sorter <O> {
     private int performComparison(O x, O y) {
         return comparer.compare(x, y);
     }
+    
+    Sorter<EntradaGenerica> postSorter = new Sorter<>(new ComparePosts());
+    Sorter<Comentario> comentSorter = new Sorter<>(new CompareComments());
+    
     
     public void sort(List<O> votes) {
         
