@@ -4,27 +4,26 @@ import mp.g17.users.Administrador;
 import mp.g17.users.Alumno;
 import mp.g17.users.Profesor;
 import mp.g17.users.Usuario;
+import mp.g17.utils.LoggerUtils;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
-import java.util.logging.Formatter;
-import java.util.logging.*;
+import java.util.logging.Logger;
 
 public class Sistema implements Serializable {
 
     // Constantes para facilitar el uso del demostrador/sistema
     public static final String CORREO_HUGO = "hs.vizcaino@alumnos.urjc.es";
-    public static Logger LOGGER;
+    public static Logger LOGGER = LoggerUtils.getLogger(Sistema.class.getSimpleName());
     // Variables de sistema
     private static Map<String, Usuario> users = new HashMap<>();
     private static Usuario currentUser = null;
     private static List<Subforo> subforums = new ArrayList<>();
     private static Administrador administrator;
-
-    static {
-        configureLogger();
-    }
 
     public static void main(String[] args) {
         LOGGER.fine("Inicializando sistema!");
@@ -156,51 +155,4 @@ public class Sistema implements Serializable {
         return system;
     }
 
-    private static void configureLogger() {
-        LogManager.getLogManager().reset();
-        LOGGER = Logger.getLogger(Sistema.class.getSimpleName());
-        LOGGER.setUseParentHandlers(false);
-        // Set better logging format.
-        StreamHandler handler = new StreamHandler(System.out, new Formatter() {
-            private static final String LOGGER_FORMAT = "[%1$tY-%1$tm-%1$td %1$tl:%1$tM:%1$tS] %4$s %3$s: %5$s%6$s%n";
-
-            @Override
-            public String format(LogRecord record) {
-                Date date = new Date(record.getMillis());
-                String source;
-                if (record.getSourceClassName() != null) {
-                    source = record.getSourceClassName();
-                    if (record.getSourceMethodName() != null) {
-                        source += " " + record.getSourceMethodName();
-                    }
-                } else {
-                    source = record.getLoggerName();
-                }
-                String message = formatMessage(record);
-                String throwable = "";
-                if (record.getThrown() != null) {
-                    StringWriter sw = new StringWriter();
-                    PrintWriter pw = new PrintWriter(sw);
-                    pw.println();
-                    record.getThrown().printStackTrace(pw);
-                    pw.close();
-                    throwable = sw.toString();
-                }
-                return String.format(LOGGER_FORMAT,
-                        date,
-                        source,
-                        record.getLoggerName(),
-                        record.getLevel().getName(),
-                        message,
-                        throwable);
-            }
-
-
-        });
-
-        LOGGER.setLevel(Level.ALL);
-        handler.setLevel(Level.ALL);
-
-        LOGGER.addHandler(handler);
-    }
 }
