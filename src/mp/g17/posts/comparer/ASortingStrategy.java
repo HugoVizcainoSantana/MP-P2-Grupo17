@@ -5,15 +5,35 @@
  */
 package mp.g17.posts.comparer;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * @author usuario
  */
 public abstract class ASortingStrategy<I, O> {
-    protected abstract List<O> _sort(List<I> unsorted);
+
+    private final SortType sortType;
+
+    public ASortingStrategy(SortType sortType) {
+        this.sortType = sortType;
+    }
+
+    protected abstract List<O> _sortDescending(List<I> unsorted);
 
     public List<O> sort(List<O> unsorted) {
-        return _sort((List<I>) unsorted);
+        if (sortType == SortType.DESCENDING) {
+            return _sortDescending((List<I>) unsorted);
+        } else if (sortType == SortType.ASCENDING) {
+            return _sortAscending((List<I>) unsorted);
+        }
+        throw new RuntimeException("Unknown sorting type passed. " + sortType.name());
+    }
+
+    protected List<O> _sortAscending(List<I> unsorted) {
+        List<O> result = new ArrayList<>(_sortDescending(unsorted));
+        Collections.reverse(result);
+        return result;
     }
 }

@@ -1,6 +1,8 @@
 package mp.g17;
 
-import mp.g17.posts.comparer.SortByPointsDescStrategy;
+import mp.g17.posts.EntradaGenerica;
+import mp.g17.posts.comparer.SortByPointsStrategy;
+import mp.g17.posts.comparer.SortType;
 import mp.g17.users.Administrador;
 import mp.g17.users.Alumno;
 import mp.g17.users.Profesor;
@@ -8,7 +10,10 @@ import mp.g17.users.Usuario;
 import mp.g17.utils.LoggerUtils;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
@@ -55,29 +60,24 @@ public class Sistema implements Serializable {
         showRegisteredUsers();
 
         LOGGER.info("Creacion de subforos");
-        if(createSubforum("Notas de la practica")){
+        if (createSubforum("Notas de la practica")) {
             LOGGER.info("Subforo creado");
         }
-        if(createSubforum("Preguntas practica")){
+        if (createSubforum("Preguntas practica")) {
             LOGGER.info("Subforo creado");
         }
 
         showSubforumsAvaliables();
-
-
-
-
-
+        for (Subforo subforum : subforums) {
+            LOGGER.info("Subforum %s");
+            LOGGER.info("Mostrando posts del subforo");
+            showPosts(subforum.getPosts());
+            subforum.setSortingStrategy(new SortByPointsStrategy(SortType.DESCENDING));
+            LOGGER.info("Se han ordenado los posts en el subforo con la estrategia 'OrdenarPorPuntuacion' con tipo Ordenacion Descendente. A partir de ahora, siempre se devolveran ordenados asi.");
+            showPosts(subforum.getPosts());
+        }
 
         logout();
-
-        if (createSubforum("Principal")) {
-            LOGGER.info("Subforo creado correctamente");
-        }
-
-        for (Subforo subforum : subforums) {
-            subforum.getPosts(new SortByPointsDescStrategy());
-        }
     }
 
 
@@ -144,12 +144,13 @@ public class Sistema implements Serializable {
         };
         LOGGER.fine(supplier);
     }
-    public static void showSubforumsAvaliables(){
+
+    public static void showSubforumsAvaliables() {
         Supplier<String> supplier = () -> {
             StringBuilder sb = new StringBuilder();
-            sb.append("Listando  Subforos Disponibles...");
-            for (Subforo subforo: subforums) {
-                sb.append("\n\t").append(String.format("Nombre de Subforo %35s -> %s", subforo.getName(), subforo.getPosts()));
+            sb.append("Listando Subforos Disponibles...");
+            for (Subforo subforo : subforums) {
+                sb.append("\n\t").append(String.format("Subforo %20s -> Tiene %s entrada(s)", subforo.getName(), subforo.getPosts().size()));
             }
             return sb.toString();
         };
@@ -160,20 +161,20 @@ public class Sistema implements Serializable {
     public static boolean createSubforum(String name) {
         Subforo forum = new Subforo(name);
         subforums.add(forum);
-        LOGGER.info("Creando subforo "+ name);
+        LOGGER.info("Creando subforo " + name);
         return true;
     }
-    public static Subforo chooseSubforum(String name){
-        for(Subforo subforo: subforums) {
+
+    public static Subforo chooseSubforum(String name) {
+        for (Subforo subforo : subforums) {
             if (subforo.getName().equals(name)) {
                 return subforo;
             }
 
-            }
+        }
         LOGGER.warning("No existe subforo con ese nombre");
         return null;
-        }
-
+    }
 
 
     private static boolean save(Sistema system) {
@@ -199,6 +200,13 @@ public class Sistema implements Serializable {
             System.exit(-1);
         }
         return system;
+    }
+
+    private static void showPosts(List<EntradaGenerica> list) {
+        for (int i = 0; i < list.size(); i++) {
+            EntradaGenerica entradaGenerica = list.get(i);
+            LOGGER.info("Post #" + i + " - " + entradaGenerica.getTitle() + " - Votos: " + entradaGenerica.getPoints());
+        }
     }
 
 }
