@@ -50,11 +50,12 @@ public class Subforo implements IObservable<EventoEntradaCreada> {
     }
 
     public List<EntradaGenerica> getPosts() {
-        return (List<EntradaGenerica>) sortingStrategy.sort(this.posts);
+        return posts;
     }
 
     public List<EntradaGenerica> getPosts(ASortingStrategy sortingStrategy) {
         this.sortingStrategy = sortingStrategy;
+        posts= sortingStrategy.sort(this.posts);
         return getPosts();
     }
 

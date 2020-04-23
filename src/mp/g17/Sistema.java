@@ -68,13 +68,15 @@ public class Sistema implements Serializable {
         }
 
         showSubforumsAvaliables();
+        LOGGER.info("Vamos a mostar los post creados en los subforos");
         for (Subforo subforum : subforums) {
-            LOGGER.info("Subforum %s");
-            LOGGER.info("Mostrando posts del subforo");
-            showPosts(subforum.getPosts());
+            showPosts(subforum);
+        }
+        LOGGER.info("Se han ordenado los posts en el subforo con la estrategia 'OrdenarPorPuntuacion' con tipo Ordenacion Descendente. A partir de ahora, siempre se devolveran ordenados asi.");
+        for(Subforo subforum: subforums){
             subforum.setSortingStrategy(new SortByPointsStrategy(SortType.DESCENDING));
-            LOGGER.info("Se han ordenado los posts en el subforo con la estrategia 'OrdenarPorPuntuacion' con tipo Ordenacion Descendente. A partir de ahora, siempre se devolveran ordenados asi.");
-            showPosts(subforum.getPosts());
+            showPosts(subforum);
+
         }
 
         logout();
@@ -150,7 +152,11 @@ public class Sistema implements Serializable {
             StringBuilder sb = new StringBuilder();
             sb.append("Listando Subforos Disponibles...");
             for (Subforo subforo : subforums) {
-                sb.append("\n\t").append(String.format("Subforo %20s -> Tiene %s entrada(s)", subforo.getName(), subforo.getPosts().size()));
+                if (subforo.getPosts() == null) {
+                    sb.append("\n\t").append(String.format("Subforo %35s -> No tiene Entradas", subforo.getName()));
+                } else {
+                    sb.append("\n\t").append(String.format("Subforo %35s -> Tiene %s entrada(s)", subforo.getName(), subforo.getPosts().size()));
+                }
             }
             return sb.toString();
         };
@@ -202,11 +208,21 @@ public class Sistema implements Serializable {
         return system;
     }
 
-    private static void showPosts(List<EntradaGenerica> list) {
-        for (int i = 0; i < list.size(); i++) {
-            EntradaGenerica entradaGenerica = list.get(i);
-            LOGGER.info("Post #" + i + " - " + entradaGenerica.getTitle() + " - Votos: " + entradaGenerica.getPoints());
-        }
-    }
+    private static void showPosts(Subforo subforo) {
+        Supplier<String> supplier = () -> {
+            StringBuilder sb = new StringBuilder();
+            sb.append("Listando Posts del subforo "+ subforo.getName());
+            if(subforo.getPosts()==null){
+                sb.append("\n\t").append(" El subforo elegido no tiene Posts para mostrar");
+            }else{
+            for (EntradaGenerica post : subforo.getPosts()) {
+                sb.append("\n\t").append(String.format("Post %35s -> Tiene %s votos(s)", post.getTitle(), post.getPoints()));
+            }
+            }
+            return sb.toString();
+        };
+        LOGGER.fine(supplier);
 
+    }
 }
+
