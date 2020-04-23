@@ -4,6 +4,7 @@ import mp.g17.events.EventoEntradaCreada;
 import mp.g17.events.IObservable;
 import mp.g17.events.IObserver;
 import mp.g17.posts.EntradaGenerica;
+import mp.g17.posts.comparer.ASortingStrategy;
 import mp.g17.users.Usuario;
 
 import java.util.List;
@@ -12,15 +13,10 @@ public class Subforo implements IObservable<EventoEntradaCreada> {
     private String name;
     private List<IObserver<EventoEntradaCreada>> usersForo;
     private List<EntradaGenerica> posts;
+    private ASortingStrategy sortingStrategy;
 
     public Subforo(String name) {
         this.name = name;
-    }
-    
-    public void printPosts() {
-        for (EntradaGenerica post : posts) {
-            System.out.println(post.toString());
-        }
     }
 
     public String getName() {
@@ -55,6 +51,16 @@ public class Subforo implements IObservable<EventoEntradaCreada> {
 
     public List<EntradaGenerica> getPosts() {
         return posts;
+    }
+
+    public List<EntradaGenerica> getPosts(ASortingStrategy sortingStrategy) {
+        this.sortingStrategy = sortingStrategy;
+        return (List<EntradaGenerica>) sortingStrategy.sort(this.posts);
+    }
+
+    public void setSortingStrategy(ASortingStrategy sortingStrategy) {
+        this.sortingStrategy = sortingStrategy;
+        this.posts = (List<EntradaGenerica>) sortingStrategy.sort(this.posts);
     }
 }
 

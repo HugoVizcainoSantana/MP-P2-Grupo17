@@ -1,5 +1,6 @@
 package mp.g17;
 
+import mp.g17.posts.comparer.SortByPointsDescStrategy;
 import mp.g17.users.Administrador;
 import mp.g17.users.Alumno;
 import mp.g17.users.Profesor;
@@ -57,6 +58,14 @@ public class Sistema implements Serializable {
         showRegisteredUsers();
 
         logout();
+
+        if (createSubforum("Principal")) {
+            LOGGER.info("Subforo creado correctamente");
+        }
+
+        for (Subforo subforum : subforums) {
+            subforum.getPosts(new SortByPointsDescStrategy());
+        }
     }
 
 
