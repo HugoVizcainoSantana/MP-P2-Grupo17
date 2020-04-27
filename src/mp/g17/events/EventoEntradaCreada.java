@@ -11,7 +11,7 @@ public class EventoEntradaCreada {
     public final EntradaGenerica post;
     public final Instant instant;
 
-    public EventoEntradaCreada(Subforo subforo, EntradaGenerica post) {
+    public EventoEntradaCreada(Subforo subforo, EntradaGenerica post) { //Creates a new event when a new post is created
         this.subforo = subforo;
         this.post = post;
         this.instant = Instant.now();
