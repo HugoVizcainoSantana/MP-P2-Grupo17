@@ -8,7 +8,7 @@ public class Ejercicio extends EntradaGenerica {
 
     private String solution;
 
-    public Ejercicio(Profesor createdBy, String title, String text, String solution) {
+    public Ejercicio(Profesor createdBy, String title, String text, String solution) { //Constructor exercise
         super(createdBy, title, text);
         this.solution = solution;
     }
