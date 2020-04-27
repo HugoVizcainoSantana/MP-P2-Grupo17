@@ -14,10 +14,10 @@ public class Subforo implements IObservable<EventoEntradaCreada> {
     private String name;
     private List<IObserver<EventoEntradaCreada>> usersForo;
     private List<EntradaGenerica> posts;
-    private List<EntradaGenerica> postUnverified;
+    private List<EntradaGenerica> postUnverified; //List of post not verified yet
     private ASortingStrategy sortingStrategy;
 
-    public Subforo(String name) {
+    public Subforo(String name) { //Constructor of a new subforum
         this.name = name;
         this.posts= new ArrayList<>();
         this.usersForo= new ArrayList();
@@ -49,11 +49,11 @@ public class Subforo implements IObservable<EventoEntradaCreada> {
     public void deleteInput(EntradaGenerica input) {
         posts.remove(input);
     }
-    public List<EntradaGenerica> getPostUnverified(){
+    public List<EntradaGenerica> getPostUnverified(){ //This method returns the posts that have not been verfied
         return postUnverified;
     }
     @Override
-    public List<IObserver<EventoEntradaCreada>> getObservers() {
+    public List<IObserver<EventoEntradaCreada>> getObservers() { //This method returns the users subscribed in the subforum
         return usersForo;
     }
 
@@ -61,7 +61,7 @@ public class Subforo implements IObservable<EventoEntradaCreada> {
         return posts;
     }
 
-    public List<EntradaGenerica> getPosts(ASortingStrategy sortingStrategy) {
+    public List<EntradaGenerica> getPosts(ASortingStrategy sortingStrategy) { //This method returns the list of posts sorted by a strategy sorting
         this.sortingStrategy = sortingStrategy;
         posts= sortingStrategy.sort(this.posts);
         return getPosts();
@@ -70,7 +70,7 @@ public class Subforo implements IObservable<EventoEntradaCreada> {
     public void setSortingStrategy(ASortingStrategy sortingStrategy) {
         this.sortingStrategy = sortingStrategy;
     }
-    public void setVerifiedInVisiblePosts(){
+    public void setVerifiedInVisiblePosts(){ //This method add to the verfied posts to visible post list
         for(EntradaGenerica entrada: postUnverified){
             if (entrada.isVerified()){
                 posts.add(entrada);
