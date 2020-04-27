@@ -1,5 +1,6 @@
 package mp.g17;
 
+import mp.g17.posts.Entrada;
 import mp.g17.posts.EntradaGenerica;
 import mp.g17.posts.comparer.SortByPointsStrategy;
 import mp.g17.posts.comparer.SortType;
@@ -26,17 +27,19 @@ public class Sistema implements Serializable {
     private static Map<String, Usuario> users = new HashMap<>();
     private static Usuario currentUser = null;
     private static List<Subforo> subforums = new ArrayList<>();
-    private static Administrador administrator;
+
+
 
     public static void main(String[] args) {
         LOGGER.fine("Inicializando sistema!");
         if (registerUser("Juan", "Perez", "12345", "j.perez@urjc.es", "jPerez")) {
             LOGGER.info("Profesor Juan Registrado");
         }
-
-        if (stablishAdmin("admin1", "12345")) {
-            LOGGER.info("Administrador asignado al sistema");
+        if(registerAdministrador("juan@admin.urjc.es","12345")){
+            LOGGER.info("Administrador registrado");
         }
+
+
         if (registerUser("Pedro", "Jimenez", "12345", "pjimenez@alumnos.urjc.es", "pedrito")) {
             LOGGER.info("Alumno Pedro Registrado");
         }
@@ -68,18 +71,57 @@ public class Sistema implements Serializable {
         }
 
         showSubforumsAvaliables();
-        LOGGER.info("Vamos a mostar los post creados en los subforos");
+        LOGGER.info("Vamos a mostrar los post creados en los subforos");
         for (Subforo subforum : subforums) {
             showPosts(subforum);
         }
+
         LOGGER.info("Se han ordenado los posts en el subforo con la estrategia 'OrdenarPorPuntuacion' con tipo Ordenacion Descendente. A partir de ahora, siempre se devolveran ordenados asi.");
         for(Subforo subforum: subforums){
             subforum.setSortingStrategy(new SortByPointsStrategy(SortType.DESCENDING));
             showPosts(subforum);
 
         }
+       LOGGER.info("Elegimos el subforo para hacer la entrada");
+        Subforo subforoActivo= chooseSubforum("Preguntas practica");
+        EntradaGenerica entrada = new Entrada(currentUser,"prueba","hello");
+
+        if (subforoActivo != null) {
+            subforoActivo.addInput(entrada);
+            LOGGER.fine("Post "+entrada.getTitle() +" creada");
+        }
+
+        LOGGER.info("Vamos a intentar hacer un una entrada en un subforo inexistente");
+        subforoActivo= chooseSubforum(" practicas");
+        if(subforoActivo!=null){
+            subforoActivo.addInput(entrada);
+            LOGGER.fine("Post "+entrada.getTitle() +" creada");
+        }
+
+
+        LOGGER.info("Vamos a mostrar los post creados en los subforos");
+        for (Subforo subforum : subforums) {
+            showPosts(subforum);
+        }
 
         logout();
+        login("juan@admin.urjc.es","12345");
+        if(currentUser instanceof Administrador){
+            for(Subforo subforo: subforums){
+                for(EntradaGenerica entrad : subforo.getPostUnverified()){
+                    LOGGER.info("Vamos a verificar las entradas pendientes en los subforos");
+                    ((Administrador) currentUser).verify(entrad,true);
+                    ((Administrador) currentUser).updatePosts(subforo);
+                }
+            }
+            LOGGER.fine("Entradas verificadas");
+
+        }
+        logout();
+        LOGGER.info("Vamos a mostrar los post creados y verificados en los subforos");
+        for (Subforo subforum : subforums) {
+            showPosts(subforum);
+        }
     }
 
 
@@ -105,10 +147,6 @@ public class Sistema implements Serializable {
         return true;
     }
 
-    private static boolean stablishAdmin(String mail, String password) {
-        administrator = new Administrador(mail, password);
-        return true;
-    }
 
 
     public static boolean registerUser(String name, String surname, String password, String mail, String alias) {
@@ -126,12 +164,29 @@ public class Sistema implements Serializable {
             LOGGER.info("Registrando nuevo profesor con correo " + mail);
             users.put(mail, user);
             return true;
-        } else {
+        } else{
             LOGGER.warning("El email introducido NO es un email valido");
             return false;
         }
 
     }
+    public static boolean registerAdministrador(String mail, String password){
+        Administrador administrador;
+        if(users.containsKey(mail)){
+            LOGGER.warning("Ya existe un usuario con el correo " + mail);
+        }else{
+            if(mail.endsWith("@admin.urjc.es")) {
+                administrador = new Administrador(mail, password);
+                LOGGER.info("Registrando nuevo administrador con correo "+ mail);
+                users.put(mail,administrador);
+                return true;
+            }
+        }
+        LOGGER.warning("El email introducido no es un email valido para un administrador");
+        return false;
+
+    }
+
 
     public static void showRegisteredUsers() {
         Supplier<String> supplier = () -> {
@@ -171,14 +226,26 @@ public class Sistema implements Serializable {
         return true;
     }
 
+
     public static Subforo chooseSubforum(String name) {
         for (Subforo subforo : subforums) {
-            if (subforo.getName().equals(name)) {
+            if (subforo.getName().equalsIgnoreCase(name)) {
                 return subforo;
             }
 
         }
         LOGGER.warning("No existe subforo con ese nombre");
+        return null;
+    }
+    public static EntradaGenerica chooseEntrada(String name){
+        for(Subforo subforo: subforums){
+            for(EntradaGenerica entrada : subforo.getPostUnverified()){
+                if(name.equalsIgnoreCase(entrada.getTitle())){
+                    return entrada;
+                }
+            }
+        }
+        LOGGER.warning("No existe esa entrada con ese nombre");
         return null;
     }
 
@@ -212,12 +279,12 @@ public class Sistema implements Serializable {
         Supplier<String> supplier = () -> {
             StringBuilder sb = new StringBuilder();
             sb.append("Listando Posts del subforo "+ subforo.getName());
-            if(subforo.getPosts()==null){
-                sb.append("\n\t").append(" El subforo elegido no tiene Posts para mostrar");
-            }else{
-            for (EntradaGenerica post : subforo.getPosts()) {
-                sb.append("\n\t").append(String.format("Post %35s -> Tiene %s votos(s)", post.getTitle(), post.getPoints()));
-            }
+            if (subforo.getPosts().size()==0) {
+                sb.append("\n\t").append(String.format("El subforo %10s no tiene posts",subforo.getName()));
+            }else {
+                for (EntradaGenerica post : subforo.getPosts()) {
+                    sb.append("\n\t").append(String.format("Post %30s -> Tiene %s votos(s)", post.getTitle(), post.getPoints()));
+                }
             }
             return sb.toString();
         };

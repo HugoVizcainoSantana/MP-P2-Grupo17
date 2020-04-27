@@ -7,16 +7,23 @@ import mp.g17.posts.EntradaGenerica;
 import mp.g17.posts.comparer.ASortingStrategy;
 import mp.g17.users.Usuario;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Subforo implements IObservable<EventoEntradaCreada> {
     private String name;
     private List<IObserver<EventoEntradaCreada>> usersForo;
     private List<EntradaGenerica> posts;
+    private List<EntradaGenerica> postUnverified;
     private ASortingStrategy sortingStrategy;
 
     public Subforo(String name) {
         this.name = name;
+        this.posts= new ArrayList<>();
+        this.usersForo= new ArrayList();
+        this.postUnverified= new ArrayList<>();
+
+
     }
 
     public String getName() {
@@ -32,8 +39,7 @@ public class Subforo implements IObservable<EventoEntradaCreada> {
     }
 
     public void addInput(EntradaGenerica input) {
-        posts.add(input);
-        notifyObservers(new EventoEntradaCreada(this, input));
+            postUnverified.add(input);
     }
 
     public void deleteUser(Usuario subs) {
@@ -43,7 +49,9 @@ public class Subforo implements IObservable<EventoEntradaCreada> {
     public void deleteInput(EntradaGenerica input) {
         posts.remove(input);
     }
-
+    public List<EntradaGenerica> getPostUnverified(){
+        return postUnverified;
+    }
     @Override
     public List<IObserver<EventoEntradaCreada>> getObservers() {
         return usersForo;
@@ -61,6 +69,13 @@ public class Subforo implements IObservable<EventoEntradaCreada> {
 
     public void setSortingStrategy(ASortingStrategy sortingStrategy) {
         this.sortingStrategy = sortingStrategy;
+    }
+    public void setVerifiedInVisiblePosts(){
+        for(EntradaGenerica entrada: postUnverified){
+            if (entrada.isVerified()){
+                posts.add(entrada);
+            }
+        }
     }
 }
 

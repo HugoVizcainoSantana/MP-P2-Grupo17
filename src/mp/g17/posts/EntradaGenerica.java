@@ -85,4 +85,8 @@ public abstract class EntradaGenerica implements IVotable {
     public Date getCreationDate() {
         return creationDate;
     }
+
+    public Usuario getCreatedBy() {
+        return createdBy;
+    }
 }
