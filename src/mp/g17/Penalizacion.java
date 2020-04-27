@@ -13,7 +13,7 @@ public class Penalizacion {
     private Administrador penalizedBy;
     private String reason;
 
-    public Penalizacion(Calendar fechaInicio, Administrador penalizedBy, String reason) {
+    public Penalizacion(Calendar fechaInicio, Administrador penalizedBy, String reason) { //Constructor of a new penalty
         this.fechaInicio = fechaInicio;
         GregorianCalendar calendarioAux = (GregorianCalendar) fechaInicio;
         calendarioAux.add(Calendar.DAY_OF_MONTH, 2);
