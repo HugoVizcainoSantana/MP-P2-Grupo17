@@ -4,6 +4,7 @@ import mp.g17.Subforo;
 import mp.g17.events.EventoEntradaCreada;
 import mp.g17.events.IObserver;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -21,6 +22,7 @@ public abstract class Usuario implements IObserver<EventoEntradaCreada> {
         this.alias = alias;
         this.email = email;
         this.password = password;
+        this.suscribedSubforos= new ArrayList<>();
     }
 
     public String getFirstname() {
@@ -74,7 +76,9 @@ public abstract class Usuario implements IObserver<EventoEntradaCreada> {
     public void setSuscribedSubForos(List<Subforo> suscribedSubforos) {
         this.suscribedSubforos = suscribedSubforos;
     }
-
+    public void subscribeForum(Subforo subforo){
+        suscribedSubforos.add((subforo));
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
