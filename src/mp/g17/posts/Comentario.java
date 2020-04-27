@@ -11,10 +11,10 @@ public class Comentario implements IVotable {
     private Usuario createdBy;
     private String text;
     private int points;
-    private Map<Usuario, Boolean> usersVotes;
+    private Map<Usuario, Boolean> usersVotes; //This match the vote with the user
     private Date creationDate;
 
-    public Comentario(Usuario createdBy, String text) {
+    public Comentario(Usuario createdBy, String text) { //Constructor comment
         this.createdBy = createdBy;
         this.text = text;
         this.points = 0;
