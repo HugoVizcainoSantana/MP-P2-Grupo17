@@ -5,10 +5,10 @@ import mp.g17.events.EventoEntradaCreada;
 
 public class Profesor extends Usuario {
 
-    public Profesor(String firstname, String lastname, String alias, String email, String password) {
+    public Profesor(String firstname, String lastname, String alias, String email, String password) { //Constructor for a teacher user 
         super(firstname, lastname, alias, email, password);
     }
-    public Subforo createSubforo(String name){
+    public Subforo createSubforo(String name){//This method allows a professor to create a subforum 
         return new Subforo(name);
         }
 
