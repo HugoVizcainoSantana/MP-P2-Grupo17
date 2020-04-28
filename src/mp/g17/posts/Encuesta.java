@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class Encuesta extends EntradaGenerica {
     private List<PreguntaEncuesta> polls;
 
-    public Encuesta(Profesor createdBy, String title, String text) {
+    public Encuesta(Profesor createdBy, String title, String text) { //Constructor poll
         super(createdBy, title, text);
         this.polls = new ArrayList<>();
     }
@@ -34,12 +34,11 @@ public class Encuesta extends EntradaGenerica {
         this.polls = polls;
     }
 
-    public Map<String, Map<String, Long>> getAllAnswersAnonymously() {
-        // Map<Pregunta,Map<RespuestaDada,NumVeces>>
+    public Map<String, Map<String, Long>> getAllAnswersAnonymously() { //This method gives back answers anonymously and the poll's name
         Map<String, Map<String, Long>> answers = new HashMap<>();
         polls.forEach(poll -> answers.put(
                 poll.getQuestion(),
-                poll.getAnswersRegistered()
+                poll.getAnswersRegistered() //Returns the answers from the list and puts in a sort new one 
                         .values()
                         .stream()
                         .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
@@ -47,8 +46,7 @@ public class Encuesta extends EntradaGenerica {
         return answers;
     }
 
-    public Map<String, Map<Usuario, String>> getAllAnswers() {
-        // Map<Pregunta,Map<Usuario,RespuestaDada>>
+    public Map<String, Map<Usuario, String>> getAllAnswers() { //This method gives back the anwers from every voted user and the poll's name
         Map<String, Map<Usuario, String>> answers = new HashMap<>();
         polls.forEach(poll -> answers.put(
                 poll.getQuestion(),
@@ -57,3 +55,4 @@ public class Encuesta extends EntradaGenerica {
         return answers;
     }
 }
+
