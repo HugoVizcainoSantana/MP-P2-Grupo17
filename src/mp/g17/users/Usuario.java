@@ -3,6 +3,9 @@ package mp.g17.users;
 import mp.g17.Subforo;
 import mp.g17.events.EventoEntradaCreada;
 import mp.g17.events.IObserver;
+import mp.g17.posts.Encuesta;
+import mp.g17.posts.Entrada;
+import mp.g17.posts.EntradaGenerica;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +18,7 @@ public abstract class Usuario implements IObserver<EventoEntradaCreada> {
     protected String email;
     protected String password;
     protected List<Subforo> suscribedSubforos; //List that saves in which forums are the user subscribed
+    protected  List<EntradaGenerica> createdEntradas;
 
     public Usuario(String firstname, String lastname, String alias, String email, String password) {//Constructor for a general user
         this.firstname = firstname;
@@ -23,6 +27,7 @@ public abstract class Usuario implements IObserver<EventoEntradaCreada> {
         this.email = email;
         this.password = password;
         this.suscribedSubforos= new ArrayList<>();
+        this.createdEntradas= new ArrayList<>();
     }
 
     public String getFirstname() {
@@ -79,6 +84,13 @@ public abstract class Usuario implements IObserver<EventoEntradaCreada> {
     public void subscribeForum(Subforo subforo){
         suscribedSubforos.add((subforo));
     }
+    public EntradaGenerica createEntry( String title, String texto){
+        EntradaGenerica entrada = new Entrada(this,title,texto);
+        createdEntradas.add(entrada) ;
+        return entrada;
+
+    }
+
     @Override
     public boolean equals(Object o) {//Remade equals
         if (this == o) return true;
@@ -121,4 +133,7 @@ public abstract class Usuario implements IObserver<EventoEntradaCreada> {
         System.out.println("Se ha creado una nueva entrada.");
         System.out.println(event);
     }
+
+
+
 }

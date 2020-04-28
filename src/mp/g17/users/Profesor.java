@@ -2,6 +2,9 @@ package mp.g17.users;
 
 import mp.g17.Subforo;
 import mp.g17.events.EventoEntradaCreada;
+import mp.g17.posts.Ejercicio;
+import mp.g17.posts.Encuesta;
+import mp.g17.posts.Entrada;
 
 public class Profesor extends Usuario {
 
@@ -18,4 +21,10 @@ public class Profesor extends Usuario {
         super.update(event);
     }
 
+    public  Encuesta createSurvey(String title, String text){
+        return new Encuesta(this,title,text);
+    }
+    public Ejercicio createExercise(String title, String text,String solucion){
+        return new Ejercicio(this,title,text,solucion);
+    }
 }

@@ -1,7 +1,6 @@
 package mp.g17;
 
-import mp.g17.posts.Entrada;
-import mp.g17.posts.EntradaGenerica;
+import mp.g17.posts.*;
 import mp.g17.posts.comparer.SortByPointsStrategy;
 import mp.g17.posts.comparer.SortType;
 import mp.g17.users.Administrador;
@@ -11,10 +10,7 @@ import mp.g17.users.Usuario;
 import mp.g17.utils.LoggerUtils;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
@@ -28,6 +24,7 @@ public class Sistema implements Serializable {
     private static Usuario currentUser = null;
     private static List<Subforo> subforums = new ArrayList<>();
     private static Subforo subforoActivo;
+    private static Calendar fechaActual= new GregorianCalendar();
 
 
 
@@ -68,6 +65,7 @@ public class Sistema implements Serializable {
         logout();
 
         //Login Profesor rol
+
         login("j.perez@urjc.es","12345") ;
 
         LOGGER.info("Creacion de subforos"); // Creates a new subforum
@@ -76,7 +74,17 @@ public class Sistema implements Serializable {
             subforums.add(((Profesor) currentUser).createSubforo("Evaluacion")) ;
         }
 
+
         showSubforumsAvaliables(); // Show the subforums
+        if(currentUser instanceof Profesor) {
+            LOGGER.info("Vamos a crear una encuesta");
+            Encuesta encuesta = ((Profesor) currentUser).createSurvey("Encuesta de Aprobados", "Vamos a ver cuanta gente espera aprobar");
+            encuesta.addQuestion(new PreguntaEncuesta("¿Cree usted que va a aprobar?"));
+            chooseSubforum("Preguntas practica").addInput(encuesta);
+            LOGGER.info("Vamos a crear un ejercicio");
+            Ejercicio ejercicio= ((Profesor) currentUser).createExercise("Hello world en java","Debemos hacer el hello world en java","System.out.println\"Hello world \"");
+            chooseSubforum("Preguntas practica").addInput(ejercicio);
+        }
         logout();
         LOGGER.info("Vamos a mostrar los post creados en los subforos"); // Show the posts subforum
         for (Subforo subforum : subforums) { 
@@ -92,16 +100,16 @@ public class Sistema implements Serializable {
         login("pjimenez@alumnos.urjc.es","12345");
        if(currentUser!=null) {
             subforoActivo = chooseSubforum("Preguntas practica");
-           EntradaGenerica entrada = new Entrada(currentUser, "prueba", "hello"); //Makes a new post for the subforum "preguntas practica"
-
+           EntradaGenerica entrada = currentUser.createEntry("prueba","probando"); //Makes a new post for the subforum "preguntas practica"
 
            if (subforoActivo != null) {
                subforoActivo.addInput(entrada);// Add the post to the subforum
-
                LOGGER.fine("Post " + entrada.getTitle() + " creada");
                LOGGER.info("Esperando validacion por el administrador");
            }
-           entrada = new Entrada(currentUser, "Evaluacion practica", "Se pondran las notas aqui");
+           subforoActivo= chooseSubforum("Evaluacion");
+
+           entrada = currentUser.createEntry( "Evaluacion practica", "Se pondran las notas aqui");
            subforoActivo.addInput(entrada);
 
            LOGGER.info("Vamos a intentar hacer un una entrada en un subforo inexistente");
@@ -130,6 +138,7 @@ public class Sistema implements Serializable {
             }
 
             LOGGER.fine("Entradas verificadas");
+            ((Administrador) currentUser).penalizarUsuario(chooseAlumno("b.castro.2018@alumnos.urjc.es"),"No cumple los requisitos");
 
         }
         logout();
@@ -138,34 +147,56 @@ public class Sistema implements Serializable {
         for (Subforo subforum : subforums) {
             showPosts(subforum);
         }
+        //Login with a stricker user
         login("b.castro.2018@alumnos.urjc.es","12345");
         subforoActivo=chooseSubforum("Preguntas practica");
 
         LOGGER.info("Vamos a votar el post llamado prueba");
-        for(EntradaGenerica entry: subforoActivo.getPosts()){
-            if(entry.getTitle().equalsIgnoreCase("prueba")){
-                        entry.vote(true, currentUser);
+        if(currentUser!=null) {
+            for (EntradaGenerica entry : subforoActivo.getPosts()) {
+                if (entry.getTitle().equalsIgnoreCase("prueba")) {
+                    entry.vote(true, currentUser);
+                }
             }
-        }
-        showPosts(subforoActivo);
-        LOGGER.info("Vamos a intentar duplicar el voto");
-        for(EntradaGenerica entry: subforoActivo.getPosts()){
-            if(entry.getTitle().equalsIgnoreCase("prueba")){
-                entry.vote(true,currentUser);
-            }
-        }
-        showPosts(subforoActivo);
 
-        LOGGER.info("Vamos a comprobar como se puede modificar  el voto");
-         for(EntradaGenerica entry: subforoActivo.getPosts()) {
-             if (entry.getTitle().equalsIgnoreCase("prueba")) {
-                 entry.vote(false, currentUser);
-             }
-         }
-           showPosts(subforoActivo);
-         LOGGER.info("Vamos a subscribirnos a un subforo");
-         currentUser.subscribeForum(chooseSubforum("Preguntas practica"));
-         showSubforumSubscribed();
+        }else{
+            LOGGER.warning("No puedes hacer estas funcionalidades sin estar logueado");
+        }
+        login(CORREO_HUGO,"hugo1234");
+        LOGGER.info("Vamos a votar el post llamado prueba");
+        if(currentUser!=null) {
+            for (EntradaGenerica entry : subforoActivo.getPosts()) {
+                if (entry.getTitle().equalsIgnoreCase("prueba")) {
+                    entry.vote(true, currentUser);
+                }
+            }
+            showPosts(subforoActivo);
+            LOGGER.info("Vamos a intentar duplicar el voto");
+            for (EntradaGenerica entry : subforoActivo.getPosts()) {
+                if (entry.getTitle().equalsIgnoreCase("prueba")) {
+                    entry.vote(true, currentUser);
+                }
+            }
+            showPosts(subforoActivo);
+
+            LOGGER.info("Vamos a comprobar como se puede modificar  el voto");
+            for (EntradaGenerica entry : subforoActivo.getPosts()) {
+                if (entry.getTitle().equalsIgnoreCase("prueba")) {
+                    entry.vote(false, currentUser);
+                }
+            }
+            showPosts(subforoActivo);
+            LOGGER.info("Vamos a subscribirnos a un subforo");
+            currentUser.subscribeForum(chooseSubforum("Preguntas practica"));
+            showSubforumSubscribed();
+        }else{
+            LOGGER.warning("No puedes hacer estas funcionalidades sin estar logueado");
+        }
+        LOGGER.info("Vamos a avanzar 3 dias para ver si nos podemos loguear despues de la penalizacion");
+        fechaActual.add(Calendar.DAY_OF_MONTH,3);
+        login("b.castro.2018@alumnos.urjc.es","12345");
+        logout();
+
 
          }
 
@@ -174,15 +205,19 @@ public class Sistema implements Serializable {
 
     public static boolean login(String email, String password) {
         String auth = email + ":" + password;
-        LOGGER.fine(String.format("Intento de inicio de sesion con credenciales %s", auth));
+        LOGGER.info(String.format("Intento de inicio de sesion con credenciales %s", auth));
         Usuario userByEmail = users.get(email);
         if (userByEmail != null) {
             if (userByEmail.getPassword().equals(password)) { //Check the email and the password
                 currentUser = userByEmail;
-                LOGGER.info(String.format("Login correcto! Credenciales: %s", auth));
-
                 if(currentUser instanceof Alumno){
-                    LOGGER.info("ROL : ALUMNO");
+                    if(((Alumno) currentUser).getStrike()!=null && ((Alumno) currentUser).getStrike().getFechaFinal().compareTo(fechaActual)>=0) {
+                        LOGGER.warning("Este usuario esta penalizado");
+                        currentUser=null;
+                        return false;
+                    }else {
+                        LOGGER.info("ROL : ALUMNO");
+                    }
                 }
                 else if(currentUser instanceof Profesor){
                     LOGGER.info("ROL: PROFESOR");
@@ -190,10 +225,13 @@ public class Sistema implements Serializable {
                 else if(currentUser instanceof Administrador){
                     LOGGER.info("ROL: ADMINISTRADOR");
                 }
+
+                LOGGER.fine(String.format("Login correcto! Credenciales: %s", auth));
                 return true; 
             }
 
             LOGGER.warning(String.format("Credenciales erroneos para %s:<encryptedPassword>", email)); //If are wrong returns an error message
+            currentUser=null;
         }
 
 
@@ -301,6 +339,14 @@ public class Sistema implements Serializable {
 
         }
         LOGGER.warning("No existe subforo con ese nombre"); //Warn the user if it does not exists
+        return null;
+    }
+    public static Alumno chooseAlumno(String email){
+        for(Usuario usuario: users.values()){
+            if( usuario instanceof Alumno && usuario.getEmail().equalsIgnoreCase(email)){
+                return (Alumno) usuario;
+            }
+        }
         return null;
     }
     public static EntradaGenerica chooseEntrada(String name){ //Method use to look for a post in the system

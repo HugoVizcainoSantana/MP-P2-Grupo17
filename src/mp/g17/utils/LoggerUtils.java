@@ -1,3 +1,12 @@
+package mp.g17.utils;
+
+
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Date;
+import java.util.logging.*;
+
 public class LoggerUtils {
 
     public static Logger getLogger(String name) {// Constructor for the logger

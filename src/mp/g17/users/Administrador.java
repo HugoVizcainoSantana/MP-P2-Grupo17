@@ -14,6 +14,7 @@ public class Administrador extends Usuario {
 
     public void penalizarUsuario(Alumno alumno, String reason) { //This method penalizes a member from the forum
         alumno.setStrike(new Penalizacion(new GregorianCalendar(), this, reason));
+
     }
     public void verify(EntradaGenerica entrada,boolean resultado){ //If a post does not get verified the author becomes banned
         entrada.verify(resultado);

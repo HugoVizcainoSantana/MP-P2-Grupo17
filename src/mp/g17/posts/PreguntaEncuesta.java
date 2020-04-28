@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-class PreguntaEncuesta {
+public class PreguntaEncuesta {
     private String question;
     private Set<String> answers;
     private Map<Usuario, String> answersRegistered;
