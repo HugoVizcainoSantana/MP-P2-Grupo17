@@ -14,9 +14,9 @@ public abstract class Usuario implements IObserver<EventoEntradaCreada> {
     protected String alias;
     protected String email;
     protected String password;
-    protected List<Subforo> suscribedSubforos;
+    protected List<Subforo> suscribedSubforos; //List that saves in which forums are the user subscribed
 
-    public Usuario(String firstname, String lastname, String alias, String email, String password) {
+    public Usuario(String firstname, String lastname, String alias, String email, String password) {//Constructor for a general user
         this.firstname = firstname;
         this.lastname = lastname;
         this.alias = alias;
@@ -80,7 +80,7 @@ public abstract class Usuario implements IObserver<EventoEntradaCreada> {
         suscribedSubforos.add((subforo));
     }
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o) {//Remade equals
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -105,7 +105,7 @@ public abstract class Usuario implements IObserver<EventoEntradaCreada> {
 
 
     @Override
-    public String toString() {
+    public String toString() {//Remade toString
         return new StringJoiner(", ", Usuario.class.getSimpleName() + "[", "]")
                 .add("firstname='" + firstname + "'")
                 .add("lastname='" + lastname + "'")
