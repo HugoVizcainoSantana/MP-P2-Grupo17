@@ -1,13 +1,6 @@
-package mp.g17.utils;
-
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Date;
-import java.util.logging.*;
-
 public class LoggerUtils {
 
-    public static Logger getLogger(String name) {
+    public static Logger getLogger(String name) {// Constructor for the logger
         LogManager.getLogManager().reset();
         Logger LOGGER = Logger.getLogger(name);
         LOGGER.setUseParentHandlers(false);
@@ -16,7 +9,7 @@ public class LoggerUtils {
             private static final String LOGGER_FORMAT = "[%1$tY-%1$tm-%1$td %1$tl:%1$tM:%1$tS] %4$s %3$s: %5$s%6$s%n";
 
             @Override
-            public String format(LogRecord record) {
+            public String format(LogRecord record) { //This method is used to have a better way for return messages
                 Date date = new Date(record.getMillis());
                 String source;
                 if (record.getSourceClassName() != null) {
