@@ -20,221 +20,41 @@ public class Sistema implements Serializable {
     public static final String CORREO_HUGO = "hs.vizcaino@alumnos.urjc.es";
     public static Logger LOGGER = LoggerUtils.getLogger(Sistema.class.getSimpleName());
     // Variables de sistema
-    private static Map<String, Usuario> users = new HashMap<>();
-    private static Usuario currentUser = null;
-    private static List<Subforo> subforums = new ArrayList<>();
-    private static Subforo subforoActivo;
-    private static Calendar fechaActual = new GregorianCalendar();
+    public static Map<String, Usuario> users;
+    public static Usuario currentUser = null;
+    public static List<Subforo> subforums;
+    public static Subforo subforoActivo;
+    public static Calendar fechaActual;
 
-
-    public static void main(String[] args) {
-        // Register of some users
-        LOGGER.fine("Inicializando sistema!");
-        if (registerUser("Juan", "Perez", "12345", "j.perez@urjc.es", "jPerez")) { //adds a new user (professor)
-            LOGGER.info("Profesor Juan Registrado");
-        }
-        if (registerAdministrador("juan@admin.urjc.es", "12345")) { //Makes the professor a new admin
-            LOGGER.info("Administrador registrado");
-        }
-
-        if (registerUser("Pedro", "Jimenez", "12345", "pjimenez@alumnos.urjc.es", "pedrito")) { //Adds a new alumn
-            LOGGER.info("Alumno Pedro Registrado");
-        }
-
-        if (registerUser("Borja", "Castro", "12345", "b.castro.2018@alumnos.urjc.es", "bcastro")) {
-            LOGGER.info("Alumno Borja Registrado");
-        }
-
-        if (registerUser("Hugo", "Vizcaino", "hugo1234", CORREO_HUGO, "hVizcaino")) {
-            LOGGER.info("Alumno registrado correctamente");
-        }
-        //Login of a student
-        if (login(CORREO_HUGO, "hugo1235")) {
-            LOGGER.info("Se ha iniciado sesion con las credenciales " + CORREO_HUGO + ":hugo1235"); //Login
-        }
-        if (login(CORREO_HUGO, "hugo1234")) {
-            LOGGER.info("Se ha iniciado sesion con las credenciales " + CORREO_HUGO + ":hugo1234");
-        }
-
-        LOGGER.info(String.format("El usuario actual (con sesion iniciada) es:%s", currentUser));
-
-
-        showRegisteredUsers(); //Show the users registered in the system
-        logout();
-
-        //Login Profesor rol
-
-        login("j.perez@urjc.es", "12345");
-
-        LOGGER.info("Creacion de subforos"); // Creates a new subforum
-        if (currentUser instanceof Profesor) {
-            subforums.add(createSubforo("Preguntas practica"));
-            subforums.add(createSubforo("Evaluacion"));
-        }
-
-
-        showSubforumsAvaliables(); // Show the subforums
-        if (currentUser instanceof Profesor) {
-            LOGGER.info("Vamos a crear una encuesta");
-            Encuesta encuesta = createSurvey("Encuesta de Aprobados", "Vamos a ver cuanta gente espera aprobar");
-            encuesta.addQuestion(new PreguntaEncuesta("¿Cree usted que va a aprobar?"));
-            chooseSubforum("Preguntas practica").addInput(encuesta);
-            LOGGER.info("Vamos a crear un ejercicio");
-            Ejercicio ejercicio = createExercise("Hello world en java", "Debemos hacer el hello world en java", "System.out.println(\"Hello world \")");
-            chooseSubforum("Preguntas practica").addInput(ejercicio);
-        }
-        logout();
-        LOGGER.info("Vamos a mostrar los post creados en los subforos"); // Show the posts subforum
-        for (Subforo subforum : subforums) {
-            showPosts(subforum);
-        }
-        LOGGER.info("Se han ordenado los posts en el subforo con la estrategia 'OrdenarPorPuntuacion' con tipo Ordenacion Descendente. A partir de ahora, siempre se devolveran ordenados asi.");
-        for (Subforo subforum : subforums) {
-            subforum.setSortingStrategy(new SortByPointsStrategy(SortType.DESCENDING)); //Sort the subforums by punctuation
-            showPosts(subforum);
-
-        }
-        LOGGER.info("Elegimos el subforo para hacer la entrada");
-        login("pjimenez@alumnos.urjc.es", "12345");
-        if (currentUser != null) {
-            subforoActivo = chooseSubforum("Preguntas practica");
-            EntradaGenerica entrada = createEntry("prueba", "probando"); //Makes a new post for the subforum "preguntas practica"
-
-            if (subforoActivo != null) {
-                subforoActivo.addInput(entrada);// Add the post to the subforum
-                LOGGER.fine("Post " + entrada.getTitle() + " creada");
-                LOGGER.info("Esperando validacion por el administrador");
-            }
-
-            LOGGER.info("Vamos a intentar hacer un una entrada en un subforo inexistente");
-            subforoActivo = chooseSubforum("practicas");
-            if (subforoActivo != null) {
-                subforoActivo.addInput(entrada); // Add the post to a not existant subforum
-                LOGGER.fine("Post " + entrada.getTitle() + " creada");
-            } else {
-                LOGGER.warning("El subforo solicitado no existe.");
-            }
-        } else {
-            LOGGER.warning("Debe haber iniciado sesion un usuario para estas opciones");
-        }
-        LOGGER.info("Vamos a mostrar los post creados en los subforos");
-        for (Subforo subforum : subforums) {
-            showPosts(subforum);
-        }
-        logout();//logout as alumn
-
-        login("juan@admin.urjc.es", "12345"); //Login as admin
-        if (currentUser instanceof Administrador) {
-            LOGGER.info("Vamos a verificar las entradas pendientes en los subforos"); //Check the posts as admin before set the as available
-            for (Subforo subforo : subforums) {
-                for (EntradaGenerica entry : subforo.getPostUnverified()) {
-                    ((Administrador) currentUser).verify(entry, true);
-                }
-                ((Administrador) currentUser).updatePosts(subforo);
-            }
-
-            LOGGER.fine("Entradas verificadas");
-            LOGGER.info("Como la entrada de un alumno no ha sido adecuada, vamos a proceder a penalizarle.");
-            ((Administrador) currentUser).penalizarUsuario(chooseAlumno("b.castro.2018@alumnos.urjc.es"), "No cumple los requisitos");
-
-        }
-        logout();
-
-        LOGGER.info("Vamos a mostrar los post creados y verificados en los subforos..."); // Show the verified posts
-        for (Subforo subforum : subforums) {
-            showPosts(subforum);
-        }
-        //Login with a stricker user
-        login("b.castro.2018@alumnos.urjc.es", "12345");
-        subforoActivo = chooseSubforum("Preguntas practica");
-        LOGGER.info("Vamos a votar el post llamado prueba");
-        if (currentUser != null) {
-            for (EntradaGenerica entry : subforoActivo.getPosts()) {
-                if (entry.getTitle().equalsIgnoreCase("prueba")) {
-                    entry.vote(true, currentUser);
-                }
-            }
-        } else {
-            LOGGER.warning("No puedes hacer estas funcionalidades sin estar logueado");
-        }
-        login(CORREO_HUGO, "hugo1234");
-        LOGGER.info("Vamos a votar el post llamado prueba");
-        if (currentUser != null) {
-            for (EntradaGenerica entry : subforoActivo.getPosts()) {
-                if (entry.getTitle().equalsIgnoreCase("prueba")) {
-                    entry.vote(true, currentUser);
-                }
-            }
-            showPosts(subforoActivo);
-            LOGGER.info("Vamos a intentar duplicar el voto");
-            for (EntradaGenerica entry : subforoActivo.getPosts()) {
-                if (entry.getTitle().equalsIgnoreCase("prueba")) {
-                    entry.vote(true, currentUser);
-                }
-            }
-            showPosts(subforoActivo);
-
-            LOGGER.info("Vamos a comprobar como se puede modificar el voto");
-            for (EntradaGenerica entry : subforoActivo.getPosts()) {
-                if (entry.getTitle().equalsIgnoreCase("prueba")) {
-                    entry.vote(false, currentUser);
-                }
-            }
-            showPosts(subforoActivo);
-            LOGGER.info("Vamos a subscribirnos a un subforo");
-            currentUser.subscribeForum(chooseSubforum("Preguntas practica"));
-            showSubforumSubscribed();
-            logout();
-            LOGGER.info("Vamos a hacer que un profesor cree una entrada en el subforo al que se ha suscrito el usuario, para comprobar que funcionan las notificaciones");
-            login("j.perez@urjc.es", "12345");
-            subforoActivo = chooseSubforum("Preguntas practica");
-            EntradaGenerica entrada = createEntry("Dudas Practica 2", "Aqui os resolvere las dudas de la practica 2 que os he explicado en clase");
-            subforoActivo.addInput(entrada);
-            LOGGER.info("Entrada creada");
-            logout();//logout profesor
-
-            login("juan@admin.urjc.es", "12345"); //Login as admin
-            if (currentUser instanceof Administrador) {
-                LOGGER.info("Vamos a verificar las entradas pendientes en el subforo \"Preguntas Practica\""); //Check the posts as admin before set the as available
-                subforoActivo = chooseSubforum("Preguntas practica");
-                for (EntradaGenerica entry : subforoActivo.getPostUnverified()) {
-                    ((Administrador) currentUser).verify(entry, true);
-                }
-                ((Administrador) currentUser).updatePosts(subforoActivo);
-
-
-                LOGGER.fine("Entradas verificadas");
-                LOGGER.info("Como la entrada de un alumno no ha sido adecuada, vamos a proceder a penalizarle.");
-                ((Administrador) currentUser).penalizarUsuario(chooseAlumno("b.castro.2018@alumnos.urjc.es"), "No cumple los requisitos");
-
-            }
-            logout();
-        } else {
-            LOGGER.warning("No puedes hacer estas funcionalidades sin estar logueado");
-        }
-        LOGGER.info("Vamos a avanzar 3 dias para ver si nos podemos loguear despues de la penalizacion");
-        fechaActual.add(Calendar.DAY_OF_MONTH, 3);
-        login("b.castro.2018@alumnos.urjc.es", "12345");
-        logout();
-
-
+    public Sistema (){
+        this.users = new HashMap<>();
+        this.currentUser = null;
+        this.subforums = new ArrayList<>();
+        this.subforoActivo = null;
+        fechaActual = new GregorianCalendar();
+    }
+    public static String getCorreoHugo() {
+        return CORREO_HUGO;
     }
 
-    private static Subforo createSubforo(String name) {
+    public static Subforo createSubforo(String name) {
         return new Subforo(((Profesor) currentUser), name);
     }
 
-    private static EntradaGenerica createEntry(String title, String text) {
+    public static EntradaGenerica createEntry(String title, String text) {
         return new Entrada(currentUser, title, text);
     }
 
-    private static Ejercicio createExercise(String title, String text, String solution) {
+    public static Ejercicio createExercise(String title, String text, String solution) {
         return new Ejercicio(((Profesor) currentUser), title, text, solution);
     }
 
-    private static Encuesta createSurvey(String title, String text) {
+    public static Encuesta createSurvey(String title, String text) {
         return new Encuesta(((Profesor) currentUser), title, text);
     }
+
+
+
 
     public static boolean login(String email, String password) {
         String auth = email + ":" + password;
@@ -401,7 +221,7 @@ public class Sistema implements Serializable {
     }
 
 
-    private static boolean save(Sistema system) { //Method that saves all the system information
+    public static boolean save(Sistema system) { //Method that saves all the system information
         try (FileOutputStream file = new FileOutputStream("forum.obj")) {
             try (ObjectOutputStream output = new ObjectOutputStream(file)) {
                 output.writeObject(system);
@@ -426,7 +246,7 @@ public class Sistema implements Serializable {
         return system;
     }
 
-    private static void showPosts(Subforo subforo) { //Method that shows all the posts in the system
+    public static void showPosts(Subforo subforo) { //Method that shows all the posts in the system
         Supplier<String> supplier = () -> {
             StringBuilder sb = new StringBuilder();
             sb.append("Listando Posts del subforo " + subforo.getName());
