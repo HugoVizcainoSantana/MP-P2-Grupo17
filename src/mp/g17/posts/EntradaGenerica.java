@@ -4,7 +4,7 @@ import mp.g17.users.Usuario;
 
 import java.util.*;
 
-public abstract class EntradaGenerica implements IVotable {
+public abstract class EntradaGenerica implements IVotable, IDatable {
 
     private Usuario createdBy;
     private int points;

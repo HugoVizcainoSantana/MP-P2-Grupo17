@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Comentario implements IVotable {
+public class Comentario implements IVotable, IDatable {
 
     private Usuario createdBy;
     private String text;

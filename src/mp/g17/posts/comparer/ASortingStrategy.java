@@ -31,6 +31,7 @@ public abstract class ASortingStrategy<I, O> {
         throw new RuntimeException("Unknown sorting type passed. " + sortType.name());
     }
 
+    // Default implementation, in case the developer doesn't provide one
     protected List<O> _sortAscending(List<I> unsorted) {
         List<O> result = new ArrayList<>(_sortDescending(unsorted));
         Collections.reverse(result);
