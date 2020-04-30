@@ -11,6 +11,7 @@ import mp.g17.utils.LoggerUtils;
 import java.io.*;
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Sistema implements Serializable {
@@ -41,9 +42,9 @@ public class Sistema implements Serializable {
                 LOGGER.info("Datos cargados correctamente");
                 LOGGER.info(system.toString());
             }
-        } catch (Exception e) {
+        } catch (Exception ex) {
             LOGGER.severe("Error en la carga de datos del sistema...");
-            LOGGER.severe(e.getMessage());
+            LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
             System.exit(-1);
         }
         return system;
@@ -52,12 +53,13 @@ public class Sistema implements Serializable {
     public static boolean save(Sistema system) { //Method that saves all the system information
         try (FileOutputStream file = new FileOutputStream("forum.obj")) {
             try (ObjectOutputStream output = new ObjectOutputStream(file)) {
+                system.currentUser = null;
+                system.activeSubforum = null;
                 output.writeObject(system);
                 return true;
             }
-        } catch (IOException e) {
-            System.err.println(e);
-            LOGGER.severe(e.getMessage());
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
             return false;
         }
     }
@@ -186,6 +188,9 @@ public class Sistema implements Serializable {
         if (currentUser != null) {
             LOGGER.fine("Haciendo logout...");
             currentUser = null;
+            for (Subforo subforum : subforums) {
+                subforum.setSortingStrategy(Subforo.DEFAULT_SORT);
+            }
         } else {
             LOGGER.fine("No hay sesion iniciada");
         }
@@ -340,12 +345,11 @@ public class Sistema implements Serializable {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", Sistema.class.getSimpleName() + "[", "]")
-                .add("users=" + users)
-                .add("currentUser=" + currentUser)
-                .add("subforums=" + subforums)
-                .add("activeSubforum=" + activeSubforum)
-                .add("currentDate=" + currentDate)
+        return new StringJoiner(",", Sistema.class.getSimpleName() + "[", "]")
+                .add("\n\t\tusers=" + users)
+                .add("\n\t\tcurrentUser=" + currentUser)
+                .add("\n\t\tsubforums=" + subforums)
+                .add("\n\t\tactiveSubforum=" + activeSubforum)
                 .toString();
     }
 }

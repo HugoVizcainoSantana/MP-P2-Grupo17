@@ -78,8 +78,17 @@ public class DemostradorGuardaDatos {
             Encuesta encuesta = system.createSurvey("Encuesta de Final de curso");
             Ejercicio ejercicio = system.createExercise("Raiz cuadrada de 49", "7");
             TextoPlano texto = system.createTextDescription("Por favor se necesita todo este antes del dia 25 de mayo");
-            encuesta.addQuestion(new PreguntaEncuesta("¿Cree usted que va a aprobar?"));
-            encuesta.addQuestion(new PreguntaEncuesta("¿Cree que ha aprendido suficiente?"));
+            PreguntaEncuesta preguntaEncuesta1 = new PreguntaEncuesta("¿Cree usted que va a aprobar?");
+            preguntaEncuesta1.addAnswer("Si, con muy buena nota.");
+            preguntaEncuesta1.addAnswer("Si, con la nota justa.");
+            preguntaEncuesta1.addAnswer("No, pero me quedo cerca.");
+            preguntaEncuesta1.addAnswer("No.");
+            PreguntaEncuesta preguntaEncuesta2 = new PreguntaEncuesta("¿Cree que ha aprendido suficiente?");
+            preguntaEncuesta2.addAnswer("Si");
+            preguntaEncuesta2.addAnswer("No");
+            preguntaEncuesta2.addAnswer("Ns/Nc");
+            encuesta.addQuestion(preguntaEncuesta1);
+            encuesta.addQuestion(preguntaEncuesta2);
 
             Subforo subforoExamenes = system.chooseSubforum("Examenes");
             if (subforoExamenes != null) {
@@ -118,6 +127,7 @@ public class DemostradorGuardaDatos {
 
         system.showInformationPost((system.chooseEntrada("Practica menor")));
 
+        LOGGER.info("Procediendo a hacer un backup del sistema...");
         if (Sistema.save(system)) {
             LOGGER.info("Datos guardados correctamente");
         } else {

@@ -90,11 +90,8 @@ public class DemostradorCargaDatos {
         system.setActiveSubforum(system.chooseSubforum("Preguntas practica"));
         LOGGER.info("Vamos a votar el post llamado prueba");
         if (system.getCurrentUser() != null) {
-            for (EntradaGenerica entry : system.getActiveSubforum().getPosts()) {
-                if (entry.getTitle().equalsIgnoreCase("prueba")) {
-                    entry.vote(true, system.getCurrentUser());
-                }
-            }
+            Entrada entry = system.getActiveSubforum().getPostByTitle("prueba");
+            entry.vote(true, system.getCurrentUser());
         } else {
             LOGGER.warning("No puedes hacer estas funcionalidades sin estar logueado");
         }
@@ -157,6 +154,9 @@ public class DemostradorCargaDatos {
         LOGGER.info("Vamos a avanzar 3 dias para ver si nos podemos loguear despues de la penalizacion");
         system.getCurrentDate().add(Calendar.DAY_OF_MONTH, 3);
         system.login("b.castro.2018@alumnos.urjc.es", "12345");
+        LOGGER.info("Vamos a votar en una encuesta");
+        Subforo subforoExamenes = system.chooseSubforum("Examenes");
+        //Entrada entrada =
         system.logout();
 
     }

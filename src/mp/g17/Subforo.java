@@ -14,8 +14,10 @@ import mp.g17.users.Usuario;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 public class Subforo implements IObservable<EventoEntradaCreada>, Serializable {
+    public static final ASortingStrategy DEFAULT_SORT = new SortByPointsStrategy(SortType.ASCENDING);
     private Profesor createdBy;
     private String name;
     private List<IObserver<EventoEntradaCreada>> usersForo;
@@ -29,7 +31,7 @@ public class Subforo implements IObservable<EventoEntradaCreada>, Serializable {
         this.posts = new ArrayList<>();
         this.usersForo = new ArrayList<>();
         this.postUnverified = new ArrayList<>();
-        sortingStrategy= new SortByPointsStrategy(SortType.ASCENDING);
+        sortingStrategy = DEFAULT_SORT;
     }
 
     public String getName() {
@@ -90,6 +92,22 @@ public class Subforo implements IObservable<EventoEntradaCreada>, Serializable {
         for (EntradaGenerica post : posts) {
             postUnverified.remove(post);
         }
+    }
+
+    public Entrada getPostByTitle(String title) {
+        for (Entrada post : this.posts) {
+            if (post.getTitle().equalsIgnoreCase(title))
+                return post;
+        }
+        return null;
+    }
+
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Subforo.class.getSimpleName() + "[", "]")
+                .add("name='" + name + "'")
+                .toString();
     }
 }
 
