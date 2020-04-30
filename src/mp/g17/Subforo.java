@@ -17,13 +17,17 @@ import java.util.List;
 import java.util.StringJoiner;
 
 public class Subforo implements IObservable<EventoEntradaCreada>, Serializable {
-    public static final ASortingStrategy DEFAULT_SORT = new SortByPointsStrategy(SortType.ASCENDING);
+    public static final ASortingStrategy DEFAULT_SORT = new SortByPointsStrategy(SortType.DESCENDING);
     private Profesor createdBy;
     private String name;
     private List<IObserver<EventoEntradaCreada>> usersForo;
     private List<Entrada> posts;
     private List<Entrada> postUnverified; //List of post not verified yet
     private ASortingStrategy sortingStrategy;
+
+    public ASortingStrategy getSortingStrategy() {
+        return sortingStrategy;
+    }
 
     public Subforo(Profesor createdBy, String name) { //Constructor of a new subforum
         this.name = name;
@@ -68,8 +72,8 @@ public class Subforo implements IObservable<EventoEntradaCreada>, Serializable {
     }
 
     public List<Entrada> getPosts() {
-        posts = sortingStrategy.sort(this.posts);
-        return posts;
+        this.posts = sortingStrategy.sort(this.posts);
+        return this.posts;
     }
 
     public List<Entrada> getPosts(ASortingStrategy sortingStrategy) { //This method returns the list of posts sorted by a strategy sorting

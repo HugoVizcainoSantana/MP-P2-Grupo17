@@ -128,8 +128,7 @@ public abstract class Usuario implements IObserver<EventoEntradaCreada>, Seriali
 
     @Override
     public void update(EventoEntradaCreada event) {
-        LOGGER.info("Se ha creado una nueva entrada.");
-        LOGGER.info(event.toString());
+        LOGGER.info("Se ha creado una nueva entrada. " + event.toString());
     }
 
 }

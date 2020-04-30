@@ -6,8 +6,6 @@
 package mp.g17.posts.comparer;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -15,7 +13,7 @@ import java.util.List;
  */
 public abstract class ASortingStrategy<I, O> implements Serializable {
 
-    private final SortType sortType;
+    public final SortType sortType;
 
     public ASortingStrategy(SortType sortType) {
         this.sortType = sortType;
@@ -33,9 +31,5 @@ public abstract class ASortingStrategy<I, O> implements Serializable {
     }
 
     // Default implementation, in case the developer doesn't provide one
-    protected List<O> _sortAscending(List<I> unsorted) {
-        List<O> result = new ArrayList<>(_sortDescending(unsorted));
-        Collections.reverse(result);
-        return result;
-    }
+    protected abstract List<O> _sortAscending(List<I> unsorted);
 }

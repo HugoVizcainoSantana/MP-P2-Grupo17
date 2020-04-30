@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 public class Sistema implements Serializable {
 
     public static Logger LOGGER = LoggerUtils.getLogger();
+    public static Random RANDOM = new Random();
     private static Sistema INSTANCE;
     // Variables de sistema
     private Map<String, Usuario> users;
@@ -101,12 +102,13 @@ public class Sistema implements Serializable {
     public void showPosts(Subforo subforo) { //Method that shows all the posts in the system
         Supplier<String> supplier = () -> {
             StringBuilder sb = new StringBuilder();
-            sb.append("Listando Posts del subforo " + subforo.getName());
+            sb.append("Listando Posts del subforo ").append(subforo.getName());
             if (subforo.getPosts().size() == 0) { //Check if a subforum is empty
                 sb.append("\n\t").append(String.format("El subforo %10s no tiene posts", subforo.getName()));
             } else {
+                sb.append("Los posts estan ordenados con la estrategia ").append(subforo.getSortingStrategy()).append(" ").append(subforo.getSortingStrategy().sortType);
                 for (EntradaGenerica post : subforo.getPosts()) {
-                    sb.append("\n\t").append(String.format("Post %30s -> Tiene %s votos(s)", post.getTitle(), post.getPoints()));
+                    sb.append("\n\t").append(String.format("Post %30s Creado: %20s-> Tiene %s votos(s)", post.getTitle(), post.getCreationDate(), post.getPoints()));
                 }
             }
             return sb.toString();
@@ -120,24 +122,18 @@ public class Sistema implements Serializable {
         return new Subforo(((Profesor) currentUser), name);
     }
 
-    public EntradaGenerica createEntry(String title, Entrada entradas) {
-        Entrada entrada = new Entrada(currentUser, title);
-        for (EntradaGenerica entry : entradas.getEntradas()) {
-            entrada.add(entry);
-        }
-        return entrada;
-    }
-
     public Ejercicio createExercise(String title, String solution) {
+        sleep();
         return new Ejercicio(((Profesor) currentUser), title, solution);
     }
 
     public Encuesta createSurvey(String title) {
-
+        sleep();
         return new Encuesta(((Profesor) currentUser), title);
     }
 
     public TextoPlano createTextDescription(String text) {
+        sleep();
         return new TextoPlano(currentUser, text);
     }
 
@@ -163,6 +159,9 @@ public class Sistema implements Serializable {
                 }
 
                 LOGGER.fine(String.format("Login correcto! Credenciales: %s", auth));
+                for (Subforo subforum : subforums) {
+                    subforum.setSortingStrategy(Subforo.DEFAULT_SORT);
+                }
                 return true;
             }
 
@@ -191,6 +190,7 @@ public class Sistema implements Serializable {
         if (currentUser != null) {
             LOGGER.fine("Haciendo logout...");
             currentUser = null;
+            LOGGER.fine("Cambiando sistema de ordenacion de subforos al por defecto, para que un usuario sin logear vea los posts ordenados por puntos descendente.");
             for (Subforo subforum : subforums) {
                 subforum.setSortingStrategy(Subforo.DEFAULT_SORT);
             }
@@ -314,13 +314,10 @@ public class Sistema implements Serializable {
             StringBuilder sb = new StringBuilder();
             sb.append("Listando Subforos Subscritos del usuario activo");
             if (currentUser instanceof Alumno || currentUser instanceof Profesor) {
-                for (Subforo subforo : currentUser.getSuscribedSubForos()) { //Check with for if the user is in the forum
-                    if (subforo.getPosts().size() == 0) {
-                        sb.append("\n\t").append(String.format("El usuario %s no esta subscrito a ningun subforo", currentUser.getFullName()));
-                    } else {
-                        sb.append("\n\t").append(String.format("El usuario %30s -> Subforo: %s  ", currentUser.getFullName(), subforo.getName()));
-                    }
-                }
+                if (currentUser.getSuscribedSubForos().size() == 0)
+                    sb.append("\n\t").append(String.format("El usuario %s no esta subscrito a ningun subforo", currentUser.getFullName()));
+                else
+                    sb.append("\n\t").append(String.format("El usuario %s esta subscrito a %d subforo(s)", currentUser.getFullName(), currentUser.getSuscribedSubForos().size()));
             }
             return sb.toString();
         };
@@ -392,6 +389,14 @@ public class Sistema implements Serializable {
 
     public void showSurveyResult(Encuesta encuesta) {
         showSurveyResult(encuesta, false);
+    }
+
+    private void sleep() {
+        try {
+            Thread.sleep(RANDOM.nextInt(100));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
 

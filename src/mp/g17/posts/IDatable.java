@@ -1,7 +1,7 @@
 package mp.g17.posts;
 
-import java.util.Date;
+import java.time.Instant;
 
 public interface IDatable {
-    Date getCreationDate();
+    Instant getCreationDate();
 }

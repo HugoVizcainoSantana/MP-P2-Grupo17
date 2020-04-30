@@ -3,7 +3,11 @@ package mp.g17.posts;
 import mp.g17.users.Usuario;
 
 import java.io.Serializable;
-import java.util.*;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class EntradaGenerica implements IVotable, IDatable, Serializable {
 
@@ -15,7 +19,7 @@ public abstract class EntradaGenerica implements IVotable, IDatable, Serializabl
     private boolean verified;
     private List<Comentario> commentList;
     private Map<Usuario, Boolean> usersVotes;
-    private Date creationDate;
+    private Instant creationDate;
 
     public EntradaGenerica(Usuario createdBy, String title) {
         this(createdBy, title, null);
@@ -28,7 +32,7 @@ public abstract class EntradaGenerica implements IVotable, IDatable, Serializabl
         this.content = content;
         this.commentList = new ArrayList<>();
         this.usersVotes = new HashMap<>();
-        creationDate = new Date();
+        creationDate = Instant.now();
     }
 
     public List<Comentario> getCommentList() {
@@ -74,7 +78,7 @@ public abstract class EntradaGenerica implements IVotable, IDatable, Serializabl
         this.points = points;
     }
 
-    public Date getCreationDate() {
+    public Instant getCreationDate() {
         return creationDate;
     }
 

@@ -3,7 +3,7 @@ package mp.g17.posts;
 import mp.g17.users.Usuario;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,14 +13,14 @@ public class Comentario implements IVotable, IDatable, Serializable {
     private String text;
     private int points;
     private Map<Usuario, Boolean> usersVotes; //This match the vote with the user
-    private Date creationDate;
+    private Instant creationDate;
 
     public Comentario(Usuario createdBy, String text) { //Constructor comment
         this.createdBy = createdBy;
         this.text = text;
         this.points = 0;
         this.usersVotes = new HashMap<>();
-        creationDate= new Date();
+        creationDate = Instant.now();
     }
 
     public String getText() {
@@ -46,7 +46,7 @@ public class Comentario implements IVotable, IDatable, Serializable {
         this.points = points;
     }
 
-    public Date getCreationDate() {
+    public Instant getCreationDate() {
         return creationDate;
     }
 

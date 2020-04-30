@@ -2,6 +2,7 @@ package mp.g17.demostrator;
 
 import mp.g17.Subforo;
 import mp.g17.posts.*;
+import mp.g17.posts.comparer.SortByDateStrategy;
 import mp.g17.posts.comparer.SortByPointsStrategy;
 import mp.g17.posts.comparer.SortType;
 import mp.g17.users.Administrador;
@@ -28,7 +29,6 @@ public class DemostradorCargaDatos {
         for (Subforo subforum : system.getSubforums()) {
             subforum.setSortingStrategy(new SortByPointsStrategy(SortType.DESCENDING)); //Sort the subforums by punctuation
             system.showPosts(subforum);
-
         }
         LOGGER.info("Iniciamos sesion con un alumno, y elegimos el subforo para hacer la entrada");
         system.login("pjimenez@alumnos.urjc.es", "12345");
@@ -84,6 +84,12 @@ public class DemostradorCargaDatos {
         for (Subforo subforum : system.getSubforums()) {
             system.showPosts(subforum);
         }
+
+        LOGGER.info("Vamos a mostrar los post ordenados por fecha de creacion descendente."); // Show the verified posts
+        for (Subforo subforum : system.getSubforums()) {
+            subforum.setSortingStrategy(new SortByDateStrategy(SortType.DESCENDING));
+            system.showPosts(subforum);
+        }
         //Login with a stricker user
         system.login("b.castro.2018@alumnos.urjc.es", "12345");
         system.setActiveSubforum(system.chooseSubforum("Preguntas practica"));
@@ -95,29 +101,28 @@ public class DemostradorCargaDatos {
             LOGGER.warning("No puedes hacer estas funcionalidades sin estar logueado");
         }
         system.login("hs.vizcaino@alumnos.urjc.es", "hugo1234");
+        system.setActiveSubforum(system.chooseSubforum("Practicas"));
         LOGGER.info("Vamos a votar el post llamado prueba");
         if (system.getCurrentUser() != null) {
-            for (EntradaGenerica entry : system.getActiveSubforum().getPosts()) {
-                if (entry.getTitle().equalsIgnoreCase("prueba")) {
-                    entry.vote(true, system.getCurrentUser());
-                }
-            }
             system.showPosts(system.getActiveSubforum());
-            LOGGER.info("Vamos a intentar duplicar el voto");
-            for (EntradaGenerica entry : system.getActiveSubforum().getPosts()) {
-                if (entry.getTitle().equalsIgnoreCase("prueba")) {
-                    entry.vote(true, system.getCurrentUser());
-                }
-            }
+            system.getActiveSubforum().getPostByTitle("prueba").vote(true, system.getCurrentUser());
+            LOGGER.info("Ahora el post 'prueba' debe tener un voto");
             system.showPosts(system.getActiveSubforum());
 
-            LOGGER.info("Vamos a comprobar como se puede modificar el voto");
-            for (EntradaGenerica entry : system.getActiveSubforum().getPosts()) {
-                if (entry.getTitle().equalsIgnoreCase("prueba")) {
-                    entry.vote(false, system.getCurrentUser());
-                }
-            }
+            LOGGER.info("Vamos a intentar duplicar el voto");
+            system.getActiveSubforum().getPostByTitle("prueba").vote(true, system.getCurrentUser());
             system.showPosts(system.getActiveSubforum());
+            LOGGER.info("Los votos no se han modificado");
+
+            LOGGER.info("Vamos a comprobar como se puede modificar el voto. En este caso tendria que quedarse con -1");
+            system.getActiveSubforum().getPostByTitle("prueba").vote(false, system.getCurrentUser());
+            system.showPosts(system.getActiveSubforum());
+
+            LOGGER.info("Se van a ordenar ahora los posts por fecha descendente.");
+            for (Subforo subforum : system.getSubforums()) {
+                subforum.setSortingStrategy(new SortByDateStrategy(SortType.DESCENDING)); //Sort the subforums by punctuation
+                system.showPosts(subforum);
+            }
             LOGGER.info("Vamos a subscribirnos a un subforo");
             system.getCurrentUser().subscribeForum(system.chooseSubforum("Preguntas practica"));
             system.showSubforumSubscribed();
