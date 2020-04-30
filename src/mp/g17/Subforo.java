@@ -43,7 +43,7 @@ public class Subforo implements IObservable<EventoEntradaCreada> {
         usersForo.add(subs);
     }
 
-    public void addInput(Entrada input) {
+    public void addNewEntry(Entrada input) {
         postUnverified.add(input);
     }
 

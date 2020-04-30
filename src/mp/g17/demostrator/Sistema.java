@@ -1,9 +1,7 @@
-package mp.g17.Demostrator;
+package mp.g17.demostrator;
 
 import mp.g17.Subforo;
 import mp.g17.posts.*;
-import mp.g17.posts.comparer.SortByPointsStrategy;
-import mp.g17.posts.comparer.SortType;
 import mp.g17.users.Administrador;
 import mp.g17.users.Alumno;
 import mp.g17.users.Profesor;
@@ -17,60 +15,126 @@ import java.util.logging.Logger;
 
 public class Sistema implements Serializable {
 
-    // Constantes para facilitar el uso del demostrador/sistema
-    public static final String CORREO_HUGO = "hs.vizcaino@alumnos.urjc.es";
-
-    public Sistema() {
-        this.users= new HashMap<>();
-        this.currentUser= null;
-        this.subforums= new ArrayList<>();
-        this.subforoActivo= null;
-        this.fechaActual= new GregorianCalendar();
-    }
-
-    public static Logger getLOGGER() {
-        return LOGGER;
-    }
-
-    private static Logger LOGGER = LoggerUtils.getLogger(Sistema.class.getSimpleName());
+    public static Logger LOGGER = LoggerUtils.getLogger(Sistema.class.getSimpleName());
+    private static Sistema INSTANCE;
     // Variables de sistema
-    protected static Map<String, Usuario> users;
-    protected static Usuario currentUser;
-    protected static List<Subforo> subforums ;
-    protected static Subforo subforoActivo;
-    protected static Calendar fechaActual;
+    private Map<String, Usuario> users;
+    private Usuario currentUser;
+    private List<Subforo> subforums;
+    private Subforo activeSubforum;
+    private Calendar currentDate;
 
+    private Sistema() {
+        System.out.println("1");
+        users = new HashMap<>();
+        currentUser = null;
+        subforums = new ArrayList<>();
+        activeSubforum = null;
+        currentDate = new GregorianCalendar();
+        LOGGER.fine("Inicializando sistema");
+    }
 
+    public static Sistema load() { //Method that loads all the system information
+        Sistema system = null;
+        try (FileInputStream file = new FileInputStream("forum.obj")) {
+            try (ObjectInputStream input = new ObjectInputStream(file)) {
+                system = (Sistema) input.readObject();
+            }
+        } catch (Exception e) {
+            LOGGER.severe("Error en la carga de datos del sistema...");
+            LOGGER.severe(e.getMessage());
+            System.exit(-1);
+        }
+        return system;
+    }
 
+    public static boolean save(Sistema system) { //Method that saves all the system information
+        try (FileOutputStream file = new FileOutputStream("forum.obj")) {
+            try (ObjectOutputStream output = new ObjectOutputStream(file)) {
+                output.writeObject(system);
+                return true;
+            }
+        } catch (IOException e) {
+            LOGGER.severe(e.getMessage());
+            return false;
+        }
+    }
 
+    public static Sistema getINSTANCE() {
+        if (INSTANCE == null) {
+            INSTANCE = new Sistema();
+        }
+        return INSTANCE;
+    }
 
-    public  Subforo createSubforo(String name) {
-        LOGGER.info("Creando subforo: "+ name);
+    public Map<String, Usuario> getUsers() {
+        return users;
+    }
+
+    public Usuario getCurrentUser() {
+        return currentUser;
+    }
+
+    public List<Subforo> getSubforums() {
+        return subforums;
+    }
+
+    public Subforo getActiveSubforum() {
+        return activeSubforum;
+    }
+
+    public void setActiveSubforum(Subforo subforo) {
+        this.activeSubforum = subforo;
+    }
+
+    public Calendar getCurrentDate() {
+        return currentDate;
+    }
+
+    public void showPosts(Subforo subforo) { //Method that shows all the posts in the system
+        Supplier<String> supplier = () -> {
+            StringBuilder sb = new StringBuilder();
+            sb.append("Listando Posts del subforo " + subforo.getName());
+            if (subforo.getPosts().size() == 0) { //Check if a subforum is empty
+                sb.append("\n\t").append(String.format("El subforo %10s no tiene posts", subforo.getName()));
+            } else {
+                for (EntradaGenerica post : subforo.getPosts()) {
+                    sb.append("\n\t").append(String.format("Post %30s -> Tiene %s votos(s)", post.getTitle(), post.getPoints()));
+                }
+            }
+            return sb.toString();
+        };
+        LOGGER.fine(supplier);
+
+    }
+
+    public Subforo createSubforo(String name) {
+        LOGGER.info("Creando subforo: " + name);
         return new Subforo(((Profesor) currentUser), name);
     }
 
-    public  EntradaGenerica createEntry(String title,Entrada entradas) {
-        Entrada entrada= new Entrada(currentUser,title);
-        for(EntradaGenerica entry: entradas.getEntradas()) {
+    public EntradaGenerica createEntry(String title, Entrada entradas) {
+        Entrada entrada = new Entrada(currentUser, title);
+        for (EntradaGenerica entry : entradas.getEntradas()) {
             entrada.add(entry);
         }
         return entrada;
     }
 
-
-    public  Ejercicio createExercise(String title, String solution) {
+    public Ejercicio createExercise(String title, String solution) {
         return new Ejercicio(((Profesor) currentUser), title, solution);
     }
 
-    public  Encuesta createSurvey(String title) {
+    public Encuesta createSurvey(String title) {
 
         return new Encuesta(((Profesor) currentUser), title);
     }
-    public  TextoPlano createTextDescription(String text){
-        return new TextoPlano(currentUser,text);
+
+    public TextoPlano createTextDescription(String text) {
+        return new TextoPlano(currentUser, text);
     }
 
-    public  boolean login(String email, String password) {
+    public boolean login(String email, String password) {
         String auth = email + ":" + password;
         LOGGER.info(String.format("Intento de inicio de sesion con credenciales %s", auth));
         Usuario userByEmail = users.get(email);
@@ -78,7 +142,7 @@ public class Sistema implements Serializable {
             if (userByEmail.getPassword().equals(password)) { //Check the email and the password
                 currentUser = userByEmail;
                 if (currentUser instanceof Alumno) {
-                    if (((Alumno) currentUser).getStrike() != null && ((Alumno) currentUser).getStrike().getFechaFinal().compareTo(fechaActual) >= 0) {
+                    if (((Alumno) currentUser).getStrike() != null && ((Alumno) currentUser).getStrike().getFechaFinal().compareTo(currentDate) >= 0) {
                         LOGGER.warning("Este usuario esta penalizado");
                         currentUser = null;
                         return false;
@@ -102,20 +166,21 @@ public class Sistema implements Serializable {
 
         return false;
     }
-    public  boolean verifyAllEntries(Subforo subforo){
-        if(currentUser instanceof Administrador) {
+
+    public boolean verifyAllEntries(Subforo subforo) {
+        if (currentUser instanceof Administrador) {
             for (Entrada entry : subforo.getPostUnverified()) {
-                ((Administrador) currentUser).verify(entry,true);
+                ((Administrador) currentUser).verify(entry, true);
             }
-            ((Administrador) currentUser).updatePosts(subforoActivo);
+            ((Administrador) currentUser).updatePosts(activeSubforum);
             return true;
-        }else {
+        } else {
             LOGGER.warning("NO TIENE PERMISOS PARA ESTO");
             return false;
         }
     }
 
-    public  boolean logout() { //Logout method
+    public boolean logout() { //Logout method
         if (currentUser != null) {
             LOGGER.fine("Haciendo logout...");
             currentUser = null;
@@ -124,20 +189,19 @@ public class Sistema implements Serializable {
         }
         return true;
     }
-    public  void showInformationPost(Entrada entrada){
+
+    public void showInformationPost(Entrada entrada) {
         Supplier<String> supplier = () -> {
             StringBuilder sb = new StringBuilder();
             sb.append("Listando Informacion Detalla Post ").append(entrada.getTitle());
-            for (EntradaGenerica entry: entrada.getEntradas()) {
-                if(entry instanceof Encuesta){
-                    sb.append("\n\t").append(String.format("Encuesta ->  %s preguntas",((Encuesta) entry).getPolls().size()));
-                }
-                else if(entry instanceof TextoPlano){
-                    sb.append("\n\t").append(String.format("Texto plano %5s",entry.getTitle()));
-                }
-                else if(entry instanceof Ejercicio ){
-                    sb.append("\n\t").append(String.format("Ejercicio %10s -> %s (respuesta)",entry.getTitle(),((Ejercicio) entry).getSolution()));
-                }else{
+            for (EntradaGenerica entry : entrada.getEntradas()) {
+                if (entry instanceof Encuesta) {
+                    sb.append("\n\t").append(String.format("Encuesta ->  %s preguntas", ((Encuesta) entry).getPolls().size()));
+                } else if (entry instanceof TextoPlano) {
+                    sb.append("\n\t").append(String.format("Texto plano %5s", entry.getTitle()));
+                } else if (entry instanceof Ejercicio) {
+                    sb.append("\n\t").append(String.format("Ejercicio %10s -> %s (respuesta)", entry.getTitle(), ((Ejercicio) entry).getSolution()));
+                } else {
                     sb.append("Es una entrada sin nada");
                 }
             }
@@ -147,9 +211,9 @@ public class Sistema implements Serializable {
 
     }
 
-
-    public  boolean registerUser(String name, String surname, String password, String mail, String alias) {
+    public boolean registerUser(String name, String surname, String password, String mail, String alias) {
         Usuario user;
+        LOGGER.info("Registrando nuevo usuario con email: " + mail);
         if (users.containsKey(mail)) { // Checks if the introduced mail is in the system
             LOGGER.warning("Ya existe un usuario con el correo " + mail);
         }
@@ -170,7 +234,7 @@ public class Sistema implements Serializable {
 
     }
 
-    public  boolean registerAdministrador(String mail, String password) {
+    public boolean registerAdministrador(String mail, String password) {
         Administrador administrador;
         if (users.containsKey(mail)) { //Checks if the introduced mail is in the system
             LOGGER.warning("Ya existe un usuario con el correo " + mail);
@@ -187,8 +251,7 @@ public class Sistema implements Serializable {
 
     }
 
-
-    public  void showRegisteredUsers() { //Method that shows all the users registered in the system by mail
+    public void showRegisteredUsers() { //Method that shows all the users registered in the system by mail
         Supplier<String> supplier = () -> {
             StringBuilder sb = new StringBuilder();
             sb.append("Listando Usuarios Registrados...");
@@ -202,7 +265,7 @@ public class Sistema implements Serializable {
         LOGGER.fine(supplier);
     }
 
-    public  void showSubforumsAvaliables() { //Method that shows all the subforums created in the system
+    public void showSubforumsAvaliables() { //Method that shows all the subforums created in the system
         Supplier<String> supplier = () -> {
             StringBuilder sb = new StringBuilder();
             sb.append("Listando Subforos Disponibles...");
@@ -218,7 +281,7 @@ public class Sistema implements Serializable {
         LOGGER.fine(supplier);
     }
 
-    public  void showSubforumSubscribed() { //Show the forums that a user is subscribed
+    public void showSubforumSubscribed() { //Show the forums that a user is subscribed
         Supplier<String> supplier = () -> {
             StringBuilder sb = new StringBuilder();
             sb.append("Listando Subforos Subscritos del usuario activo");
@@ -236,7 +299,7 @@ public class Sistema implements Serializable {
         LOGGER.fine(supplier);
     }
 
-    public  Subforo chooseSubforum(String name) { //Method to choose a subforum by name
+    public Subforo chooseSubforum(String name) { //Method to choose a subforum by name
         for (Subforo subforo : subforums) {
             if (subforo.getName().equalsIgnoreCase(name)) {
                 return subforo;
@@ -247,7 +310,7 @@ public class Sistema implements Serializable {
         return null;
     }
 
-    public  Alumno chooseAlumno(String email) {
+    public Alumno chooseAlumno(String email) {
         for (Usuario usuario : users.values()) {
             if (usuario instanceof Alumno && usuario.getEmail().equalsIgnoreCase(email)) {
                 return (Alumno) usuario;
@@ -256,7 +319,7 @@ public class Sistema implements Serializable {
         return null;
     }
 
-    public  Entrada chooseEntrada(String name) { //Method use to look for a post in the system
+    public Entrada chooseEntrada(String name) { //Method use to look for a post in the system
         for (Subforo subforo : subforums) { //The method look for it in all the subforum of the system
             for (Entrada entrada : subforo.getPosts()) {
                 if (name.equalsIgnoreCase(entrada.getTitle())) {
@@ -268,47 +331,8 @@ public class Sistema implements Serializable {
         return null;
     }
 
-
-    public  boolean save(Sistema system) { //Method that saves all the system information
-        try (FileOutputStream file = new FileOutputStream("forum.obj")) {
-            try (ObjectOutputStream output = new ObjectOutputStream(file)) {
-                output.writeObject(system);
-                return true;
-            }
-        } catch (IOException e) {
-            LOGGER.severe(e.getMessage());
-            return false;
-        }
-    }
-
-    public static Sistema load() { //Method that loads all the system information
-        Sistema system = null;
-        try (FileInputStream file = new FileInputStream("forum.obj")) {
-            try (ObjectInputStream input = new ObjectInputStream(file)) {
-                system = (Sistema) input.readObject();
-            }
-        } catch (Exception e) {
-            LOGGER.severe(e.getMessage());
-            System.exit(-1);
-        }
-        return system;
-    }
-
-    public static void showPosts(Subforo subforo) { //Method that shows all the posts in the system
-        Supplier<String> supplier = () -> {
-            StringBuilder sb = new StringBuilder();
-            sb.append("Listando Posts del subforo " + subforo.getName());
-            if (subforo.getPosts().size() == 0) { //Check if a subforum is empty
-                sb.append("\n\t").append(String.format("El subforo %10s no tiene posts", subforo.getName()));
-            } else {
-                for (EntradaGenerica post : subforo.getPosts()) {
-                    sb.append("\n\t").append(String.format("Post %30s -> Tiene %s votos(s)", post.getTitle(), post.getPoints()));
-                }
-            }
-            return sb.toString();
-        };
-        LOGGER.fine(supplier);
-
+    public boolean addSubforum(Subforo subforum) {
+        return subforums.add(subforum);
     }
 }
 

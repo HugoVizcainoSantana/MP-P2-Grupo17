@@ -1,17 +1,14 @@
 package mp.g17.users;
 
-import mp.g17.Demostrator.Sistema;
 import mp.g17.Penalizacion;
+import mp.g17.demostrator.Sistema;
 import mp.g17.events.EventoEntradaCreada;
-import mp.g17.utils.LoggerUtils;
 
 import java.util.logging.Logger;
 
 public class Alumno extends Usuario {
     private Penalizacion strike;
-    public static Logger LOGGER = Sistema.getLOGGER();
-
-
+    private static Logger LOGGER = Sistema.LOGGER;
 
     public Alumno(String firstname, String lastname, String alias, String email, String password) { //Constructor of the alumn user type
         super(firstname, lastname, alias, email, password);

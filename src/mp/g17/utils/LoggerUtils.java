@@ -1,7 +1,5 @@
 package mp.g17.utils;
 
-
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Date;
@@ -10,7 +8,7 @@ import java.util.logging.*;
 public class LoggerUtils {
 
     public static Logger getLogger(String name) {// Constructor for the logger
-        LogManager.getLogManager().reset();
+        //LogManager.getLogManager().reset();
         Logger LOGGER = Logger.getLogger(name);
         LOGGER.setUseParentHandlers(false);
         // Set better logging format.
@@ -53,6 +51,7 @@ public class LoggerUtils {
         handler.setLevel(Level.ALL);
 
         LOGGER.addHandler(handler);
+        LOGGER.info("Logger created with name:" + name);
         return LOGGER;
     }
 }
