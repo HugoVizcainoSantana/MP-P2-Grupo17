@@ -38,7 +38,7 @@ public class Encuesta extends EntradaGenerica {
         Map<String, Map<String, Long>> answers = new HashMap<>();
         polls.forEach(poll -> answers.put(
                 poll.getQuestion(),
-                poll.getAnswersRegistered() //Returns the answers from the list and puts in a sort new one 
+                poll.getAnswersRegistered() //Returns the answers from the list and puts in a sort new one
                         .values()
                         .stream()
                         .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))

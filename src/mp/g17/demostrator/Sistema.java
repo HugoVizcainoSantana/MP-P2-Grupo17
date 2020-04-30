@@ -39,7 +39,9 @@ public class Sistema implements Serializable {
         try (FileInputStream file = new FileInputStream("forum.obj")) {
             try (ObjectInputStream input = new ObjectInputStream(file)) {
                 system = (Sistema) input.readObject();
-                LOGGER.info("Datos cargados correctamente");
+                LOGGER.info("Datos cargados correctamente. Fecha del backup:" + system.getCurrentDate().toString());
+                LOGGER.info("Cambiando fecha actual del sistema al momento actual");
+                system.currentDate = new GregorianCalendar();
                 LOGGER.info(system.toString());
             }
         } catch (Exception ex) {
@@ -55,6 +57,7 @@ public class Sistema implements Serializable {
             try (ObjectOutputStream output = new ObjectOutputStream(file)) {
                 system.currentUser = null;
                 system.activeSubforum = null;
+                system.currentDate = new GregorianCalendar();
                 output.writeObject(system);
                 return true;
             }
@@ -351,6 +354,26 @@ public class Sistema implements Serializable {
                 .add("\n\t\tsubforums=" + subforums)
                 .add("\n\t\tactiveSubforum=" + activeSubforum)
                 .toString();
+    }
+
+    public void showSurveyResult(Encuesta encuesta, boolean showUsernames) {
+        if (showUsernames) {
+            Map<String, Map<Usuario, String>> resultado_encuesta = encuesta.getAllAnswers();
+            resultado_encuesta.forEach((pregunta, resultados) -> {
+                LOGGER.info("Pregunta: " + pregunta);
+                resultados.forEach((usuario, respuesta) -> LOGGER.info("\tUsuario:" + usuario.getFullName() + " | Respuesta: " + respuesta));
+            });
+        } else {
+            Map<String, Map<String, Long>> resultado_encuesta = encuesta.getAllAnswersAnonymously();
+            resultado_encuesta.forEach((pregunta, resultados) -> {
+                LOGGER.info("Pregunta: " + pregunta);
+                resultados.forEach((respuesta, numVotos) -> LOGGER.info("\tRespuesta:" + respuesta + " | Veces votado: " + numVotos));
+            });
+        }
+    }
+
+    public void showSurveyResult(Encuesta encuesta) {
+        showSurveyResult(encuesta, false);
     }
 }
 

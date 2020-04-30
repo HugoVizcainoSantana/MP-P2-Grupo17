@@ -1,7 +1,6 @@
 package mp.g17.demostrator;
 
 import mp.g17.Subforo;
-import mp.g17.posts.Comentario;
 import mp.g17.posts.Entrada;
 import mp.g17.posts.EntradaGenerica;
 import mp.g17.posts.TextoPlano;
@@ -36,7 +35,7 @@ public class DemostradorCargaDatos {
         system.login("pjimenez@alumnos.urjc.es", "12345");
         if (system.getCurrentUser() != null) {
             //Makes a new post for the subforum "preguntas practica"
-            system.setActiveSubforum(system.chooseSubforum("Practicas"));
+            system.setActiveSubforum(system.chooseSubforum("Preguntas practica"));
             Entrada entrada = new Entrada(system.getCurrentUser(), "prueba");
             TextoPlano textoPlano = new TextoPlano(system.getCurrentUser(), "Post de prueba");
             entrada.add(textoPlano);
@@ -152,16 +151,6 @@ public class DemostradorCargaDatos {
         } else {
             LOGGER.warning("No puedes hacer estas funcionalidades sin estar logueado");
         }
-        LOGGER.info("Vamos a comentar el post Dudas Practica 2");
-        system.login("hs.vizcaino@alumnos.urjc.es", "hugo1234");
-        Subforo foro = system.chooseSubforum("Preguntas practica");
-        Entrada entryada = foro.getPostByTitle("Dudas Practica 2");
-        Comentario coment = new Comentario(system.getCurrentUser(), "Ejercicio completado");
-        entryada.comment(coment);
-        LOGGER.info("Vamos a votar el comentario");
-        entryada.vote(true, system.getCurrentUser());
-        LOGGER.info("El comentario" + entryada + "tiene un total de: " + entryada.getPoints() + "puntos");
-        system.logout();
         LOGGER.info("Vamos a avanzar 3 dias para ver si nos podemos loguear despues de la penalizacion");
         system.getCurrentDate().add(Calendar.DAY_OF_MONTH, 3);
         system.login("b.castro.2018@alumnos.urjc.es", "12345");
