@@ -352,5 +352,25 @@ public class Sistema implements Serializable {
                 .add("\n\t\tactiveSubforum=" + activeSubforum)
                 .toString();
     }
+
+    public void showSurveyResult(Encuesta encuesta, boolean showUsernames) {
+        if (showUsernames) {
+            Map<String, Map<Usuario, String>> resultado_encuesta = encuesta.getAllAnswers();
+            resultado_encuesta.forEach((pregunta, resultados) -> {
+                LOGGER.info("Pregunta: " + pregunta);
+                resultados.forEach((usuario, respuesta) -> LOGGER.info("\tUsuario:" + usuario.getFullName() + " | Respuesta: " + respuesta));
+            });
+        } else {
+            Map<String, Map<String, Long>> resultado_encuesta = encuesta.getAllAnswersAnonymously();
+            resultado_encuesta.forEach((pregunta, resultados) -> {
+                LOGGER.info("Pregunta: " + pregunta);
+                resultados.forEach((respuesta, numVotos) -> LOGGER.info("\tRespuesta:" + respuesta + " | Veces votado: " + numVotos));
+            });
+        }
+    }
+
+    public void showSurveyResult(Encuesta encuesta) {
+        showSurveyResult(encuesta, false);
+    }
 }
 

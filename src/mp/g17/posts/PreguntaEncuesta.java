@@ -4,26 +4,26 @@ import mp.g17.demostrator.Sistema;
 import mp.g17.users.Usuario;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Logger;
 
 public class PreguntaEncuesta implements Serializable {
     private String question;
-    private Set<String> answers;
+    private List<String> answers;
     private Map<Usuario, String> answersRegistered;
     private static Logger LOGGER = Sistema.LOGGER;
 
 
     public PreguntaEncuesta(String question) { //Constructor of the questions from the poll
         this.question = question;
-        this.answers = new HashSet<>();
+        this.answers = new ArrayList<>();
         this.answersRegistered = new HashMap<>();
     }
 
-    public Set<String> addAnswer(String newAnswer) {
+    public List<String> addAnswer(String newAnswer) {
         answers.add(newAnswer);
         return answers;
     }
@@ -53,6 +53,10 @@ public class PreguntaEncuesta implements Serializable {
             LOGGER.severe("Error guardando la respuesta...");
         }
         return false;
+    }
+
+    public List<String> getAnswers() {
+        return answers;
     }
 }
 

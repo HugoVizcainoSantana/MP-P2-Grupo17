@@ -1,15 +1,14 @@
 package mp.g17.demostrator;
 
 import mp.g17.Subforo;
-import mp.g17.posts.Entrada;
-import mp.g17.posts.EntradaGenerica;
-import mp.g17.posts.TextoPlano;
+import mp.g17.posts.*;
 import mp.g17.posts.comparer.SortByPointsStrategy;
 import mp.g17.posts.comparer.SortType;
 import mp.g17.users.Administrador;
 import mp.g17.utils.LoggerUtils;
 
 import java.util.Calendar;
+import java.util.Random;
 import java.util.logging.Logger;
 
 public class DemostradorCargaDatos {
@@ -156,8 +155,38 @@ public class DemostradorCargaDatos {
         system.login("b.castro.2018@alumnos.urjc.es", "12345");
         LOGGER.info("Vamos a votar en una encuesta");
         Subforo subforoExamenes = system.chooseSubforum("Examenes");
-        //Entrada entrada =
+        Entrada entrada = subforoExamenes.getPostByTitle("Encuesta final");
+        for (EntradaGenerica entradaEntrada : entrada.getEntradas()) {
+            Encuesta encuesta = (Encuesta) entradaEntrada;
+            for (PreguntaEncuesta poll : encuesta.getPolls()) {
+                LOGGER.info("Primero vamos a intentar responder algo incorrecto");
+                if (poll.answer(system.getCurrentUser(), "Random")) {
+                    LOGGER.info("Respuesta registrada");
+                } else {
+                    LOGGER.warning("La respuesta introducida no es valida. Elija una de las siguientes: '" + String.join(", ", poll.getAnswers()) + "'");
+                }
+
+                if (poll.answer(system.getCurrentUser(), poll.getAnswers().get(new Random().nextInt(poll.getAnswers().size())))) {
+                    LOGGER.info("Respuesta registrada");
+                } else {
+                    LOGGER.warning("La respuesta introducida no es valida. Elija una de las siguientes: '" + String.join(", ", poll.getAnswers()) + "'");
+                }
+            }
+        }
         system.logout();
+
+        LOGGER.info("Vamos a hacer que un profesor vea los resultados de las encuestas");
+        system.login("j.perez@urjc.es", "12345");
+        Subforo subforumExamenes = system.chooseSubforum("Examenes");
+        Entrada encuesta_final = subforoExamenes.getPostByTitle("Encuesta final");
+        for (EntradaGenerica entradaEntrada : entrada.getEntradas()) {
+            Encuesta encuesta = (Encuesta) entradaEntrada;
+            LOGGER.info("Viendo las respuestas de forma anonima");
+            system.showSurveyResult(encuesta);
+            LOGGER.info("Viendo las respuestas con el nombre de usuario");
+            system.showSurveyResult(encuesta, true);
+        }
+        system.logout();//logout profesor
 
     }
 }
