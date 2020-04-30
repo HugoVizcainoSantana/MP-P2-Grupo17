@@ -56,90 +56,104 @@ public class DemostradorGuardaDatos {
             LOGGER.info("Error registrando un usuario");
         }
 
-        system.login("j.perez@urjc.es", "12345");
-        LOGGER.info("Creacion de subforos1"); // Creates a new subforum
-        if (system.getCurrentUser() instanceof Profesor) {
-            system.addSubforum(system.createSubforo("Dudas"));
-            system.addSubforum(system.createSubforo("Novedades"));
-            system.addSubforum(system.createSubforo("Preguntas practica"));
-        }
-        system.logout();
-        system.login("jc.galdos@urjc.es", "12345");
-        LOGGER.info("Creacion de subforos 2");
-        if (system.getCurrentUser() instanceof Profesor) {
-            system.addSubforum(system.createSubforo("Practicas"));
-            system.addSubforum(system.createSubforo("Examenes"));
+        if(system.login("j.perez@urjc.es", "12345")) {
+            LOGGER.info("Creacion de subforos1"); // Creates a new subforum
+            if (system.getCurrentUser() instanceof Profesor) {
+                system.addSubforum(system.createSubforo("Dudas"));
+                system.addSubforum(system.createSubforo("Novedades"));
+                system.addSubforum(system.createSubforo("Preguntas practica"));
+            }
+            system.logout();
+            system.login("jc.galdos@urjc.es", "12345");
+            LOGGER.info("Creacion de subforos 2");
+            if (system.getCurrentUser() instanceof Profesor) {
+                system.addSubforum(system.createSubforo("Practicas"));
+                system.addSubforum(system.createSubforo("Examenes"));
+            }
+        }else{
+            LOGGER.warning("No puedes hacer estas funcionalidades sin estar logueado");
         }
         system.logout();
         LOGGER.info("Mostrando los subforos sin ninguna sesion activa");
         system.showSubforumsAvaliables(); // Show the subforums
-        system.login("j.perez@urjc.es", "12345");
-        if (system.getCurrentUser() instanceof Profesor) {
-            LOGGER.info("Vamos a crear una entrada con encuesta, otra con un ejercicio y un texto plano");
-            Encuesta encuesta = system.createSurvey("Encuesta de Final de curso");
-            Ejercicio ejercicio = system.createExercise("Raiz cuadrada de 49", "7");
-            TextoPlano texto = system.createTextDescription("Por favor se necesita todo este antes del dia 25 de mayo");
-            PreguntaEncuesta preguntaEncuesta1 = new PreguntaEncuesta("¿Cree usted que va a aprobar?");
-            preguntaEncuesta1.addAnswer("Si, con muy buena nota.");
-            preguntaEncuesta1.addAnswer("Si, con la nota justa.");
-            preguntaEncuesta1.addAnswer("No, pero me quedo cerca.");
-            preguntaEncuesta1.addAnswer("No.");
-            PreguntaEncuesta preguntaEncuesta2 = new PreguntaEncuesta("¿Cree que ha aprendido suficiente?");
-            preguntaEncuesta2.addAnswer("Si");
-            preguntaEncuesta2.addAnswer("No");
-            preguntaEncuesta2.addAnswer("Ns/Nc");
-            encuesta.addQuestion(preguntaEncuesta1);
-            encuesta.addQuestion(preguntaEncuesta2);
+        if(system.login("j.perez@urjc.es", "12345")){
 
-            Subforo subforoExamenes = system.chooseSubforum("Examenes");
-            if (subforoExamenes != null) {
-                Entrada entrada = new Entrada(system.getCurrentUser(), "Encuesta final");
-                entrada.add(encuesta);
-                subforoExamenes.addNewEntry(entrada);
-            }
 
-            Subforo subforoPracticas = system.chooseSubforum("Practicas");
-            if (subforoPracticas != null) {
-                Entrada entrada = new Entrada(system.getCurrentUser(), "Practica menor");
-                entrada.add(ejercicio);
-                entrada.add(texto);
-                subforoPracticas.addNewEntry(entrada);
-                //Entry with different texts
-                entrada= new Entrada(system.getCurrentUser(),"Notas de la practica numero 1");
-                entrada.add(new TextoPlano(system.getCurrentUser()," Pedro -> 7"));
-                entrada.add(new TextoPlano(system.getCurrentUser(),"Borja -> 7"));
-                entrada.add(new TextoPlano(system.getCurrentUser(),"Alberto -> 8"));
-                subforoPracticas.addNewEntry(entrada);
+            if (system.getCurrentUser() instanceof Profesor) {
+                LOGGER.info("Vamos a crear una entrada con encuesta, otra con un ejercicio y un texto plano");
+                Encuesta encuesta = system.createSurvey("Encuesta de Final de curso");
+                Ejercicio ejercicio = system.createExercise("Raiz cuadrada de 49", "7");
+                TextoPlano texto = system.createTextDescription("Por favor se necesita todo este antes del dia 25 de mayo");
+                PreguntaEncuesta preguntaEncuesta1 = new PreguntaEncuesta("¿Cree usted que va a aprobar?");
+                preguntaEncuesta1.addAnswer("Si, con muy buena nota.");
+                preguntaEncuesta1.addAnswer("Si, con la nota justa.");
+                preguntaEncuesta1.addAnswer("No, pero me quedo cerca.");
+                preguntaEncuesta1.addAnswer("No.");
+                PreguntaEncuesta preguntaEncuesta2 = new PreguntaEncuesta("¿Cree que ha aprendido suficiente?");
+                preguntaEncuesta2.addAnswer("Si");
+                preguntaEncuesta2.addAnswer("No");
+                preguntaEncuesta2.addAnswer("Ns/Nc");
+                encuesta.addQuestion(preguntaEncuesta1);
+                encuesta.addQuestion(preguntaEncuesta2);
+
+                Subforo subforoExamenes = system.chooseSubforum("Examenes");
+                if (subforoExamenes != null) {
+                    Entrada entrada = new Entrada(system.getCurrentUser(), "Encuesta final");
+                    entrada.add(encuesta);
+                    subforoExamenes.addNewEntry(entrada);
+                }
+
+                Subforo subforoPracticas = system.chooseSubforum("Practicas");
+                if (subforoPracticas != null) {
+                    Entrada entrada = new Entrada(system.getCurrentUser(), "Practica menor");
+                    entrada.add(ejercicio);
+                    entrada.add(texto);
+                    subforoPracticas.addNewEntry(entrada);
+                    //Entry with different texts
+                    entrada = new Entrada(system.getCurrentUser(), "Notas de la practica numero 1");
+                    entrada.add(new TextoPlano(system.getCurrentUser(), " Pedro -> 7"));
+                    entrada.add(new TextoPlano(system.getCurrentUser(), "Borja -> 7"));
+                    entrada.add(new TextoPlano(system.getCurrentUser(), "Alberto -> 8"));
+                    subforoPracticas.addNewEntry(entrada);
+                }
             }
+        }else{
+            LOGGER.warning("No puedes hacer estas funcionalidades sin estar logueado");
         }
         system.logout();
 
-        system.login("juan@admin.urjc.es", "12345"); //Login as admin
-        if (system.getCurrentUser() instanceof Administrador) {
-            LOGGER.info("Vamos a verificar las entradas pendientes en los subforos"); //Check the posts as admin before set the as available
-            system.setActiveSubforum(system.chooseSubforum("Examenes"));
-            Subforo subforoActivo = system.getActiveSubforum();
-            if (system.verifyAllEntries(subforoActivo)) {
-                LOGGER.fine("Entradas verificadas del subforo " + subforoActivo.getName());
-            }
-            system.setActiveSubforum(system.chooseSubforum("Practicas"));
-            subforoActivo = system.getActiveSubforum();
-            if (system.verifyAllEntries(subforoActivo)) {
-                LOGGER.fine("Entradas verificadas del subforo " + subforoActivo.getName());
+        if(system.login("juan@admin.urjc.es", "12345")) { //Login as admin
+            if (system.getCurrentUser() instanceof Administrador) {
+                LOGGER.info("Vamos a verificar las entradas pendientes en los subforos"); //Check the posts as admin before set the as available
+                system.setActiveSubforum(system.chooseSubforum("Examenes"));
+                Subforo subforoActivo = system.getActiveSubforum();
+                if (system.verifyAllEntries(subforoActivo)) {
+                    LOGGER.fine("Entradas verificadas del subforo " + subforoActivo.getName());
+                }
+                system.setActiveSubforum(system.chooseSubforum("Practicas"));
+                subforoActivo = system.getActiveSubforum();
+                if (system.verifyAllEntries(subforoActivo)) {
+                    LOGGER.fine("Entradas verificadas del subforo " + subforoActivo.getName());
+                }
             }
         }
 
         system.logout();
 
         system.showPosts(system.getActiveSubforum());
-        system.login("b.castro.2018@alumnos.urjc.es","12345");
-        system.showInformationPost((system.chooseEntrada("Practica menor")));
-        system.showInformationPost((system.chooseEntrada("Notas de la practica numero 1")));
-        Comentario comentario = new Comentario(system.getCurrentUser(),"Ojala asi sean todas las practicas");
-        system.chooseEntrada("Practica menor").comment(comentario);
-        comentario = new Comentario(system.getCurrentUser(),"Buena practica") ;
-        system.chooseEntrada("Notas de la practica numero 1").comment(comentario);
-        system.showComments(system.chooseEntrada("Practica menor"));
+        if (system.login("b.castro.2018@alumnos.urjc.es","12345")){
+
+
+            system.showInformationPost((system.chooseEntrada("Practica menor")));
+            system.showInformationPost((system.chooseEntrada("Notas de la practica numero 1")));
+            Comentario comentario = new Comentario(system.getCurrentUser(), "Ojala asi sean todas las practicas");
+            system.chooseEntrada("Practica menor").comment(comentario);
+            comentario = new Comentario(system.getCurrentUser(), "Buena practica");
+            system.chooseEntrada("Notas de la practica numero 1").comment(comentario);
+            system.showComments(system.chooseEntrada("Practica menor"));
+        } else{
+            LOGGER.warning("No puedes hacer estas funcionalidades sin estar logueado");
+        }
         system.logout();
         LOGGER.info("Procediendo a hacer un backup del sistema...");
         if (Sistema.save(system)) {
