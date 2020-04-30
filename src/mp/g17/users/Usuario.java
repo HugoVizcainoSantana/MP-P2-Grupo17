@@ -1,5 +1,6 @@
 package mp.g17.users;
 
+import mp.g17.Demostrator.Sistema;
 import mp.g17.Subforo;
 import mp.g17.events.EventoEntradaCreada;
 import mp.g17.events.IObserver;
@@ -19,7 +20,8 @@ public abstract class Usuario implements IObserver<EventoEntradaCreada> {
     protected String password;
     protected List<Subforo> suscribedSubforos; //List that saves in which forums are the user subscribed
     protected List<EntradaGenerica> createdEntradas;
-    public static Logger LOGGER = LoggerUtils.getLogger(Usuario.class.getSimpleName());
+    protected Logger logger;
+
 
     public Usuario(String firstname, String lastname, String alias, String email, String password) {//Constructor for a general user
         this.firstname = firstname;
@@ -29,6 +31,7 @@ public abstract class Usuario implements IObserver<EventoEntradaCreada> {
         this.password = password;
         this.suscribedSubforos= new ArrayList<>();
         this.createdEntradas= new ArrayList<>();
+        logger= Sistema.getLOGGER();
     }
 
     public String getFirstname() {
@@ -126,8 +129,9 @@ public abstract class Usuario implements IObserver<EventoEntradaCreada> {
 
     @Override
     public void update(EventoEntradaCreada event) {
-        LOGGER.info("Se ha creado una nueva entrada.");
-        LOGGER.info(event.toString());
+        Logger logger=Sistema.getLOGGER();
+        logger.info("Se ha creado una nueva entrada.");
+        logger.info(event.toString());
     }
 
 }

@@ -2,26 +2,42 @@ package mp.g17.posts;
 
 import mp.g17.users.Usuario;
 
+import javax.management.relation.RelationNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Entrada extends EntradaGenerica {
     private Ejercicio ejercicio;
     private Encuesta encuesta;
+    private List<EntradaGenerica> entradas = new ArrayList<>();
+    private boolean verified;
 
-    public Entrada(Usuario createdBy, String title, String text) { //Constructor of a new post
-        super(createdBy, title, text);
+    public Entrada(Usuario createdBy, String title ) { //Constructor of a new post
+        super(createdBy, title);
+        this.verified = false;
     }
-/*
-    public Entrada( Usuario cretedBy, String tittle,String text, Encuesta encuesta ){
-        super(cretedBy,tittle,text);
-        this.encuesta=encuesta;
+
+    public void verify(boolean resultado) {
+        setVerified(resultado);
     }
-    public Entrada( Usuario cretedBy, String tittle,String text, Ejercicio ejercicio ){
-        super(cretedBy,tittle,text);
-        this.ejercicio=ejercicio;
+    public void setEntradas(List<EntradaGenerica> entradas) {
+        this.entradas = entradas;
     }
-    public Entrada( Usuario cretedBy, String tittle,String text, Ejercicio ejercicio,Encuesta encuesta ){
-        super(cretedBy,tittle,text);
-        this.ejercicio=ejercicio;
-        this.encuesta=encuesta;
+    public void setVerified(boolean verified) {
+        this.verified = verified;
     }
-*/
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void add(EntradaGenerica entry){
+    entradas.add(entry);
+}
+
+    public List<EntradaGenerica> getEntradas() {
+        return entradas;
+
+    }
+
+
 }

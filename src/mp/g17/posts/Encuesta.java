@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 public class Encuesta extends EntradaGenerica {
     private List<PreguntaEncuesta> polls;
 
-    public Encuesta(Profesor createdBy, String title, String text) { //Constructor poll
-        super(createdBy, title, text);
+    public Encuesta(Profesor createdBy, String title) { //Constructor poll
+        super(createdBy, title);
         this.polls = new ArrayList<>();
     }
 
@@ -54,5 +54,7 @@ public class Encuesta extends EntradaGenerica {
         ));
         return answers;
     }
+
+
 }
 

@@ -1,5 +1,6 @@
 package mp.g17.users;
 
+import mp.g17.Demostrator.Sistema;
 import mp.g17.Penalizacion;
 import mp.g17.events.EventoEntradaCreada;
 import mp.g17.utils.LoggerUtils;
@@ -8,7 +9,7 @@ import java.util.logging.Logger;
 
 public class Alumno extends Usuario {
     private Penalizacion strike;
-    public static Logger LOGGER = LoggerUtils.getLogger(Alumno.class.getSimpleName());
+    public static Logger LOGGER = Sistema.getLOGGER();
 
 
 
@@ -25,7 +26,6 @@ public class Alumno extends Usuario {
     public Penalizacion getStrike() {
         return strike;
     }
-
 
     public void setStrike(Penalizacion strike) { //This method gives the strike to the alumn
         LOGGER.warning("El alumno " + email + " esta recibiendo una penalizacion de " + strike.getPenalizedBy().getEmail() + ".\n\tMotivo: " + strike.getReason());

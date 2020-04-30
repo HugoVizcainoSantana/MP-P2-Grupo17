@@ -2,6 +2,7 @@ package mp.g17.users;
 
 import mp.g17.Penalizacion;
 import mp.g17.Subforo;
+import mp.g17.posts.Entrada;
 import mp.g17.posts.EntradaGenerica;
 
 import java.util.GregorianCalendar;
@@ -19,7 +20,7 @@ public class Administrador extends Usuario {
 
     }
 
-    public void verify(EntradaGenerica entrada, boolean resultado) { //If a post does not get verified the author becomes banned
+    public void verify(Entrada entrada, boolean resultado) { //If a post does not get verified the author becomes banned
         entrada.verify(resultado);
         if (resultado == false) {
             if (entrada.getCreatedBy() instanceof Alumno) {

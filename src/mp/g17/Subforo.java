@@ -3,6 +3,7 @@ package mp.g17;
 import mp.g17.events.EventoEntradaCreada;
 import mp.g17.events.IObservable;
 import mp.g17.events.IObserver;
+import mp.g17.posts.Entrada;
 import mp.g17.posts.EntradaGenerica;
 import mp.g17.posts.comparer.ASortingStrategy;
 import mp.g17.posts.comparer.SortByPointsStrategy;
@@ -17,9 +18,9 @@ public class Subforo implements IObservable<EventoEntradaCreada> {
     private Profesor createdBy;
     private String name;
     private List<IObserver<EventoEntradaCreada>> usersForo;
-    private List<EntradaGenerica> posts;
-    private List<EntradaGenerica> postUnverified; //List of post not verified yet
-    private ASortingStrategy sortingStrategy = new SortByPointsStrategy(SortType.DESCENDING);
+    private List<Entrada> posts;
+    private List<Entrada> postUnverified; //List of post not verified yet
+    private ASortingStrategy sortingStrategy ;
 
     public Subforo(Profesor createdBy, String name) { //Constructor of a new subforum
         this.name = name;
@@ -27,6 +28,7 @@ public class Subforo implements IObservable<EventoEntradaCreada> {
         this.posts = new ArrayList<>();
         this.usersForo = new ArrayList<>();
         this.postUnverified = new ArrayList<>();
+        sortingStrategy= new SortByPointsStrategy(SortType.ASCENDING);
     }
 
     public String getName() {
@@ -41,7 +43,7 @@ public class Subforo implements IObservable<EventoEntradaCreada> {
         usersForo.add(subs);
     }
 
-    public void addInput(EntradaGenerica input) {
+    public void addInput(Entrada input) {
         postUnverified.add(input);
     }
 
@@ -53,7 +55,7 @@ public class Subforo implements IObservable<EventoEntradaCreada> {
         posts.remove(input);
     }
 
-    public List<EntradaGenerica> getPostUnverified() { //This method returns the posts that have not been verfied
+    public List<Entrada> getPostUnverified() { //This method returns the posts that have not been verfied
         return postUnverified;
     }
 
@@ -62,12 +64,12 @@ public class Subforo implements IObservable<EventoEntradaCreada> {
         return usersForo;
     }
 
-    public List<EntradaGenerica> getPosts() {
+    public List<Entrada> getPosts() {
         posts = sortingStrategy.sort(this.posts);
         return posts;
     }
 
-    public List<EntradaGenerica> getPosts(ASortingStrategy sortingStrategy) { //This method returns the list of posts sorted by a strategy sorting
+    public List<Entrada> getPosts(ASortingStrategy sortingStrategy) { //This method returns the list of posts sorted by a strategy sorting
         this.sortingStrategy = sortingStrategy;
         posts = sortingStrategy.sort(this.posts);
         return getPosts();
@@ -78,7 +80,7 @@ public class Subforo implements IObservable<EventoEntradaCreada> {
     }
 
     public void setVerifiedInVisiblePosts() { //This method add to the verfied posts to visible post list
-        for (EntradaGenerica entrada : postUnverified) {
+        for (Entrada entrada : postUnverified) {
             if (entrada.isVerified()) {
                 posts.add(entrada);
                 notifyObservers(new EventoEntradaCreada(this, entrada));

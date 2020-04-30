@@ -1,5 +1,6 @@
 package mp.g17.posts;
 
+import mp.g17.Demostrator.Sistema;
 import mp.g17.users.Usuario;
 import mp.g17.utils.LoggerUtils;
 
@@ -13,7 +14,7 @@ public class PreguntaEncuesta {
     private String question;
     private Set<String> answers;
     private Map<Usuario, String> answersRegistered;
-    public static Logger LOGGER = LoggerUtils.getLogger(PreguntaEncuesta.class.getSimpleName());
+
 
     public PreguntaEncuesta(String question) { //Constructor of the questions from the poll
         this.question = question;
@@ -39,15 +40,18 @@ public class PreguntaEncuesta {
     }
 
     public boolean answer(Usuario user, String answer) { //This method is used to answer a poll's question
+        Logger logger = Sistema.getLOGGER();
         try {
+
             if (answers.contains(answer)) {
+
                 answersRegistered.put(user, answer);
                 return true;
             } else throw new IllegalArgumentException("La respuesta mandada no es una de las posibles para esta pregunta"); //This part is in charge of that if the answer is not in a correct format or returns a mistake
         } catch (IllegalArgumentException e) {
-            LOGGER.severe("Error almacenando respuesta de encuesta. " + e.getMessage());
+            logger.severe("Error almacenando respuesta de encuesta. " + e.getMessage());
         } catch (Exception e) {
-            LOGGER.severe("Error guardando la respuesta...");
+            logger.severe("Error guardando la respuesta...");
         }
         return false;
     }
