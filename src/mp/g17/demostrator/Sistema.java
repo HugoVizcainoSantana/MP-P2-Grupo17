@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 public class Sistema implements Serializable {
 
-    public static Logger LOGGER = LoggerUtils.getLogger(Sistema.class.getSimpleName());
+    public static Logger LOGGER = LoggerUtils.getLogger();
     private static Sistema INSTANCE;
     // Variables de sistema
     private Map<String, Usuario> users;
@@ -25,7 +25,6 @@ public class Sistema implements Serializable {
     private Calendar currentDate;
 
     private Sistema() {
-        System.out.println("1");
         users = new HashMap<>();
         currentUser = null;
         subforums = new ArrayList<>();

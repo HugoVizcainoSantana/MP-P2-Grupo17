@@ -9,7 +9,11 @@ import mp.g17.utils.LoggerUtils;
 import java.util.logging.Logger;
 
 public class DemostradorCargaDatos {
-    private static Logger LOGGER = LoggerUtils.getLogger(DemostradorCargaDatos.class.getSimpleName());
+    private static Logger LOGGER = LoggerUtils.getLogger();
+
+    static {
+        LOGGER.setUseParentHandlers(false);
+    }
 
     public static void main(String[] args) {
         LOGGER.info("Iniciando demostrador");
@@ -119,8 +123,6 @@ public class DemostradorCargaDatos {
         system.showPosts(system.getActiveSubforum());
 
         system.showInformationPost((system.chooseEntrada("Practica menor")));
-
-
     }
 }
 

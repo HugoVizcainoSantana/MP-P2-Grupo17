@@ -15,7 +15,7 @@ public class Profesor extends Usuario {
 
     @Override
     public void update(EventoEntradaCreada event) {//This method returns the alert of have created a new post
-        Logger logger=LoggerUtils.getLogger(Profesor.class.getSimpleName());
+        Logger logger = LoggerUtils.getLogger();
         logger.info("Soy el Profesor " + email + " que ha recibido una notificacion de post creado");
         super.update(event);
     }
