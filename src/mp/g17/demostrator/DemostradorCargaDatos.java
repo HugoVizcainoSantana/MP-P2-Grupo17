@@ -38,7 +38,7 @@ public class DemostradorCargaDatos {
             Entrada entrada = new Entrada(system.getCurrentUser(), "prueba");
             TextoPlano textoPlano = new TextoPlano(system.getCurrentUser(), "Post de prueba");
             entrada.add(textoPlano);
-            system.getActiveSubforum().addNewEntry(entrada);
+
 
             if (system.getActiveSubforum() != null) {
                 system.getActiveSubforum().addNewEntry(entrada);// Add the post to the subforum
@@ -47,7 +47,7 @@ public class DemostradorCargaDatos {
             }
 
             LOGGER.info("Vamos a intentar hacer un una entrada en un subforo inexistente");
-            system.setActiveSubforum(system.chooseSubforum("practicas"));
+            system.setActiveSubforum(system.chooseSubforum("hello"));
             if (system.getActiveSubforum() != null) {
                 system.getActiveSubforum().addNewEntry(entrada); // Add the post to a not existant subforum
                 LOGGER.fine("Post " + entrada.getTitle() + " creada");

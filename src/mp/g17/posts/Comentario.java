@@ -49,6 +49,14 @@ public class Comentario implements IVotable, IDatable, Serializable {
     public Date getCreationDate() {
         return creationDate;
     }
+
+    public Usuario getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Usuario createdBy) {
+        this.createdBy = createdBy;
+    }
 }
 
 
