@@ -3,13 +3,14 @@ package mp.g17.posts;
 import mp.g17.demostrator.Sistema;
 import mp.g17.users.Usuario;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
-public class PreguntaEncuesta {
+public class PreguntaEncuesta implements Serializable {
     private String question;
     private Set<String> answers;
     private Map<Usuario, String> answersRegistered;

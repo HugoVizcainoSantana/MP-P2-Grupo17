@@ -11,16 +11,17 @@ import mp.g17.posts.comparer.SortType;
 import mp.g17.users.Profesor;
 import mp.g17.users.Usuario;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Subforo implements IObservable<EventoEntradaCreada> {
+public class Subforo implements IObservable<EventoEntradaCreada>, Serializable {
     private Profesor createdBy;
     private String name;
     private List<IObserver<EventoEntradaCreada>> usersForo;
     private List<Entrada> posts;
     private List<Entrada> postUnverified; //List of post not verified yet
-    private ASortingStrategy sortingStrategy ;
+    private ASortingStrategy sortingStrategy;
 
     public Subforo(Profesor createdBy, String name) { //Constructor of a new subforum
         this.name = name;

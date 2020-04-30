@@ -6,12 +6,13 @@ import mp.g17.events.EventoEntradaCreada;
 import mp.g17.events.IObserver;
 import mp.g17.posts.EntradaGenerica;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.logging.Logger;
 
-public abstract class Usuario implements IObserver<EventoEntradaCreada> {
+public abstract class Usuario implements IObserver<EventoEntradaCreada>, Serializable {
     protected String firstname;
     protected String lastname;
     protected String alias;

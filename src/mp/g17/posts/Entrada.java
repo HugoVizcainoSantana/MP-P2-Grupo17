@@ -2,17 +2,14 @@ package mp.g17.posts;
 
 import mp.g17.users.Usuario;
 
-import javax.management.relation.RelationNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Entrada extends EntradaGenerica {
-    private Ejercicio ejercicio;
-    private Encuesta encuesta;
     private List<EntradaGenerica> entradas = new ArrayList<>();
     private boolean verified;
 
-    public Entrada(Usuario createdBy, String title ) { //Constructor of a new post
+    public Entrada(Usuario createdBy, String title) { //Constructor of a new post
         super(createdBy, title);
         this.verified = false;
     }

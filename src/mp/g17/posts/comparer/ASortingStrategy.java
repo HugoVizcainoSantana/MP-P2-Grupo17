@@ -5,6 +5,7 @@
  */
 package mp.g17.posts.comparer;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 /**
  * @author usuario
  */
-public abstract class ASortingStrategy<I, O> {
+public abstract class ASortingStrategy<I, O> implements Serializable {
 
     private final SortType sortType;
 

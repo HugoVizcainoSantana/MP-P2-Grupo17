@@ -1,129 +1,163 @@
 package mp.g17.demostrator;
 
 import mp.g17.Subforo;
-import mp.g17.posts.*;
+import mp.g17.posts.Entrada;
+import mp.g17.posts.EntradaGenerica;
+import mp.g17.posts.TextoPlano;
+import mp.g17.posts.comparer.SortByPointsStrategy;
+import mp.g17.posts.comparer.SortType;
 import mp.g17.users.Administrador;
-import mp.g17.users.Profesor;
 import mp.g17.utils.LoggerUtils;
 
+import java.util.Calendar;
 import java.util.logging.Logger;
 
 public class DemostradorCargaDatos {
     private static Logger LOGGER = LoggerUtils.getLogger();
 
-    static {
-        LOGGER.setUseParentHandlers(false);
-    }
-
     public static void main(String[] args) {
-        LOGGER.info("Iniciando demostrador");
-        Sistema system = Sistema.getINSTANCE();
-        if (system.registerUser("Juan", "Perez", "12345", "j.perez@urjc.es", "jPerez")) { //adds a new user (professor)
-            LOGGER.info("Profesor Juan Registrado");
-        } else {
-            LOGGER.info("Error registrando un usuario");
-        }
-        if (system.registerUser("Juan carlos", "Galdos", "12345", "jc.galdos@urjc.es", "jcGaldos")) {
-            LOGGER.info("Profesor Juan carlos Registrado");
-        } else {
-            LOGGER.info("Error registrando un usuario");
-        }
-        if (system.registerAdministrador("juan@admin.urjc.es", "12345")) { //Makes the professor a new admin
-            LOGGER.info("Administrador registrado");
-        } else {
-            LOGGER.info("Error registrando un usuario");
-        }
-        if (system.registerAdministrador("pedro@admin.urjc.es", "12345")) {
-            LOGGER.info("Administrador registrado");
-        } else {
-            LOGGER.info("Error registrando un usuario");
-        }
+        LOGGER.info("Iniciando demostrador que carga datos y demuestra la funcionalidad");
+        Sistema system = Sistema.load();
 
-        if (system.registerUser("Pedro", "Jimenez", "12345", "pjimenez@alumnos.urjc.es", "pedrito")) { //Adds a new alumn
-            LOGGER.info("Alumno Pedro Registrado");
-        } else {
-            LOGGER.info("Error registrando un usuario");
-        }
+        system.showRegisteredUsers(); //Show the users registered in the system
 
-        if (system.registerUser("Borja", "Castro", "12345", "b.castro.2018@alumnos.urjc.es", "bcastro")) {
-            LOGGER.info("Alumno Borja Registrado");
-        } else {
-            LOGGER.info("Error registrando un usuario");
+        LOGGER.info("Vamos a mostrar los post creados en los subforos. Por defecto esta ordenado con la estrategia"); // Show the posts subforum
+        for (Subforo subforum : system.getSubforums()) {
+            system.showPosts(subforum);
         }
+        LOGGER.info("Se han ordenado los posts en el subforo con la estrategia 'OrdenarPorPuntuacion' con tipo Ordenacion Descendente. A partir de ahora, siempre se devolveran ordenados asi.");
+        for (Subforo subforum : system.getSubforums()) {
+            subforum.setSortingStrategy(new SortByPointsStrategy(SortType.DESCENDING)); //Sort the subforums by punctuation
+            system.showPosts(subforum);
 
-        if (system.registerUser("Hugo", "Vizcaino", "hugo1234", "hs.vizcaino@alumnos.urjc.es", "hVizcaino")) {
-            LOGGER.info("Alumno registrado correctamente");
         }
-        if (system.registerUser("Alberto", "Jimenez", "12345", "ajimenez@alumnos.urjc.es", "aJimenez")) {
-            LOGGER.info("Alumno registrado");
-        } else {
-            LOGGER.info("Error registrando un usuario");
-        }
+        LOGGER.info("Iniciamos sesion con un alumno, y elegimos el subforo para hacer la entrada");
+        system.login("pjimenez@alumnos.urjc.es", "12345");
+        if (system.getCurrentUser() != null) {
+            //Makes a new post for the subforum "preguntas practica"
+            system.setActiveSubforum(system.chooseSubforum("Preguntas practica"));
+            Entrada entrada = new Entrada(system.getCurrentUser(), "prueba");
+            TextoPlano textoPlano = new TextoPlano(system.getCurrentUser(), "Post de prueba");
+            entrada.add(textoPlano);
+            system.getActiveSubforum().addNewEntry(entrada);
 
-        system.login("j.perez@urjc.es", "12345");
-        LOGGER.info("Creacion de subforos1"); // Creates a new subforum
-        if (system.getCurrentUser() instanceof Profesor) {
-            system.addSubforum(system.createSubforo("Dudas"));
-            system.addSubforum(system.createSubforo("Novedades"));
-        }
-        system.logout();
-        system.login("jc.galdos@urjc.es", "12345");
-        LOGGER.info("Creacion de subforos 2");
-        if (system.getCurrentUser() instanceof Profesor) {
-            system.addSubforum(system.createSubforo("Practicas"));
-            system.addSubforum(system.createSubforo("Examenes"));
-        }
-        system.logout();
-        LOGGER.info("Mostrando los subforos sin ninguna sesion activa");
-        system.showSubforumsAvaliables(); // Show the subforums
-        system.login("j.perez@urjc.es", "12345");
-        if (system.getCurrentUser() instanceof Profesor) {
-            LOGGER.info("Vamos a crear una entrada con encuesta, otra con un ejercicio y un texto plano");
-            Encuesta encuesta = system.createSurvey("Encuesta de Final de curso");
-            Ejercicio ejercicio = system.createExercise("Raiz cuadrada de 49", "7");
-            TextoPlano texto = system.createTextDescription("Por favor se necesita todo este antes del dia 25 de mayo");
-            encuesta.addQuestion(new PreguntaEncuesta("¿Cree usted que va a aprobar?"));
-            encuesta.addQuestion(new PreguntaEncuesta("¿Cree que ha aprendido suficiente?"));
-
-            Subforo subforoExamenes = system.chooseSubforum("Examenes");
-            if (subforoExamenes != null) {
-                Entrada entrada = new Entrada(system.getCurrentUser(), "Encuesta final");
-                entrada.add(encuesta);
-                subforoExamenes.addNewEntry(entrada);
+            if (system.getActiveSubforum() != null) {
+                system.getActiveSubforum().addNewEntry(entrada);// Add the post to the subforum
+                LOGGER.fine("Post " + entrada.getTitle() + " creada");
+                LOGGER.info("Esperando validacion por el administrador");
             }
 
-            Subforo subforoPracticas = system.chooseSubforum("Practicas");
-            if (subforoPracticas != null) {
-                Entrada entrada = new Entrada(system.getCurrentUser(), "Practica menor");
-                entrada.add(ejercicio);
-                entrada.add(texto);
-                subforoPracticas.addNewEntry(entrada);
+            LOGGER.info("Vamos a intentar hacer un una entrada en un subforo inexistente");
+            system.setActiveSubforum(system.chooseSubforum("practicas"));
+            if (system.getActiveSubforum() != null) {
+                system.getActiveSubforum().addNewEntry(entrada); // Add the post to a not existant subforum
+                LOGGER.fine("Post " + entrada.getTitle() + " creada");
+            } else {
+                LOGGER.warning("El subforo solicitado no existe.");
             }
+        } else {
+            LOGGER.warning("Debe haber iniciado sesion un usuario para estas opciones");
         }
-        system.logout();
+        LOGGER.info("Vamos a mostrar los post creados en los subforos");
+        for (Subforo subforum : system.getSubforums()) {
+            system.showPosts(subforum);
+        }
+        system.logout();//logout as alumn
 
         system.login("juan@admin.urjc.es", "12345"); //Login as admin
         if (system.getCurrentUser() instanceof Administrador) {
             LOGGER.info("Vamos a verificar las entradas pendientes en los subforos"); //Check the posts as admin before set the as available
-            system.setActiveSubforum(system.chooseSubforum("Examenes"));
-            Subforo subforoActivo = system.getActiveSubforum();
-            if (system.verifyAllEntries(subforoActivo)) {
-                LOGGER.fine("Entradas verificadas del subforo " + subforoActivo.getName());
-            }
-            system.setActiveSubforum(system.chooseSubforum("Practicas"));
-            subforoActivo = system.getActiveSubforum();
-            if (system.verifyAllEntries(subforoActivo)) {
-                LOGGER.fine("Entradas verificadas del subforo " + subforoActivo.getName());
+            for (Subforo subforo : system.getSubforums()) {
+                for (Entrada entry : subforo.getPostUnverified()) {
+                    ((Administrador) system.getCurrentUser()).verify(entry, true);
+                }
+                ((Administrador) system.getCurrentUser()).updatePosts(subforo);
             }
 
+            LOGGER.fine("Entradas verificadas");
+            LOGGER.info("Como la entrada de un alumno no ha sido adecuada, vamos a proceder a penalizarle.");
+            ((Administrador) system.getCurrentUser()).penalizarUsuario(system.chooseAlumno("b.castro.2018@alumnos.urjc.es"), "No cumple los requisitos");
 
         }
-
         system.logout();
-        system.showPosts(system.getActiveSubforum());
 
-        system.showInformationPost((system.chooseEntrada("Practica menor")));
+        LOGGER.info("Vamos a mostrar los post creados y verificados en los subforos..."); // Show the verified posts
+        for (Subforo subforum : system.getSubforums()) {
+            system.showPosts(subforum);
+        }
+        //Login with a stricker user
+        system.login("b.castro.2018@alumnos.urjc.es", "12345");
+        system.setActiveSubforum(system.chooseSubforum("Preguntas practica"));
+        LOGGER.info("Vamos a votar el post llamado prueba");
+        if (system.getCurrentUser() != null) {
+            for (EntradaGenerica entry : system.getActiveSubforum().getPosts()) {
+                if (entry.getTitle().equalsIgnoreCase("prueba")) {
+                    entry.vote(true, system.getCurrentUser());
+                }
+            }
+        } else {
+            LOGGER.warning("No puedes hacer estas funcionalidades sin estar logueado");
+        }
+        system.login("hs.vizcaino@alumnos.urjc.es", "hugo1234");
+        LOGGER.info("Vamos a votar el post llamado prueba");
+        if (system.getCurrentUser() != null) {
+            for (EntradaGenerica entry : system.getActiveSubforum().getPosts()) {
+                if (entry.getTitle().equalsIgnoreCase("prueba")) {
+                    entry.vote(true, system.getCurrentUser());
+                }
+            }
+            system.showPosts(system.getActiveSubforum());
+            LOGGER.info("Vamos a intentar duplicar el voto");
+            for (EntradaGenerica entry : system.getActiveSubforum().getPosts()) {
+                if (entry.getTitle().equalsIgnoreCase("prueba")) {
+                    entry.vote(true, system.getCurrentUser());
+                }
+            }
+            system.showPosts(system.getActiveSubforum());
+
+            LOGGER.info("Vamos a comprobar como se puede modificar el voto");
+            for (EntradaGenerica entry : system.getActiveSubforum().getPosts()) {
+                if (entry.getTitle().equalsIgnoreCase("prueba")) {
+                    entry.vote(false, system.getCurrentUser());
+                }
+            }
+            system.showPosts(system.getActiveSubforum());
+            LOGGER.info("Vamos a subscribirnos a un subforo");
+            system.getCurrentUser().subscribeForum(system.chooseSubforum("Preguntas practica"));
+            system.showSubforumSubscribed();
+            system.logout();
+            LOGGER.info("Vamos a hacer que un profesor cree una entrada en el subforo al que se ha suscrito el usuario, para comprobar que funcionan las notificaciones");
+            system.login("j.perez@urjc.es", "12345");
+            system.setActiveSubforum(system.chooseSubforum("Preguntas practica"));
+            Entrada entrada = new Entrada(system.getCurrentUser(), "Dudas Practica 2");
+            TextoPlano textoPlano = new TextoPlano(system.getCurrentUser(), "Aqui os resolvere las dudas de la practica 2 que os he explicado en clase");
+            entrada.add(textoPlano);
+            system.getActiveSubforum().addNewEntry(entrada);
+            LOGGER.info("Entrada creada");
+            system.logout();//logout profesor
+
+            system.login("juan@admin.urjc.es", "12345"); //Login as admin
+            if (system.getCurrentUser() instanceof Administrador) {
+                LOGGER.info("Vamos a verificar las entradas pendientes en el subforo \"Preguntas Practica\""); //Check the posts as admin before set the as available
+                system.setActiveSubforum(system.chooseSubforum("Preguntas practica"));
+                for (Entrada entry : system.getActiveSubforum().getPostUnverified()) {
+                    ((Administrador) system.getCurrentUser()).verify(entry, true);
+                }
+                ((Administrador) system.getCurrentUser()).updatePosts(system.getActiveSubforum());
+
+                LOGGER.fine("Entradas verificadas");
+                LOGGER.info("Como la entrada de un alumno no ha sido adecuada, vamos a proceder a penalizarle.");
+                ((Administrador) system.getCurrentUser()).penalizarUsuario(system.chooseAlumno("b.castro.2018@alumnos.urjc.es"), "No cumple los requisitos");
+
+            }
+            system.logout();
+        } else {
+            LOGGER.warning("No puedes hacer estas funcionalidades sin estar logueado");
+        }
+        LOGGER.info("Vamos a avanzar 3 dias para ver si nos podemos loguear despues de la penalizacion");
+        system.getCurrentDate().add(Calendar.DAY_OF_MONTH, 3);
+        system.login("b.castro.2018@alumnos.urjc.es", "12345");
+        system.logout();
+
     }
 }
-
-

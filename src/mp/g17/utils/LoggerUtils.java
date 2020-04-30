@@ -1,11 +1,12 @@
 package mp.g17.utils;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.Date;
 import java.util.logging.*;
 
-public class LoggerUtils {
+public class LoggerUtils implements Serializable {
     private static Logger LOGGER;
 
     public static Logger getLogger() {// Constructor for the logger

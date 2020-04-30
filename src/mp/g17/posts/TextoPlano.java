@@ -6,8 +6,8 @@ import mp.g17.users.Usuario;
 
 public class TextoPlano extends EntradaGenerica {
 
-    public TextoPlano(Usuario createdBy, String title) {//Constructor text
-        super(createdBy, title);
+    public TextoPlano(Usuario createdBy, String content) {//Constructor text
+        super(createdBy, null, content);
     }
 
 

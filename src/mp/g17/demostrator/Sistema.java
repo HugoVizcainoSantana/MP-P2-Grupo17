@@ -38,6 +38,8 @@ public class Sistema implements Serializable {
         try (FileInputStream file = new FileInputStream("forum.obj")) {
             try (ObjectInputStream input = new ObjectInputStream(file)) {
                 system = (Sistema) input.readObject();
+                LOGGER.info("Datos cargados correctamente");
+                LOGGER.info(system.toString());
             }
         } catch (Exception e) {
             LOGGER.severe("Error en la carga de datos del sistema...");
@@ -54,6 +56,7 @@ public class Sistema implements Serializable {
                 return true;
             }
         } catch (IOException e) {
+            System.err.println(e);
             LOGGER.severe(e.getMessage());
             return false;
         }
@@ -197,7 +200,7 @@ public class Sistema implements Serializable {
                 if (entry instanceof Encuesta) {
                     sb.append("\n\t").append(String.format("Encuesta ->  %s preguntas", ((Encuesta) entry).getPolls().size()));
                 } else if (entry instanceof TextoPlano) {
-                    sb.append("\n\t").append(String.format("Texto plano %5s", entry.getTitle()));
+                    sb.append("\n\t").append(String.format("Texto plano %5s", entry.getContent()));
                 } else if (entry instanceof Ejercicio) {
                     sb.append("\n\t").append(String.format("Ejercicio %10s -> %s (respuesta)", entry.getTitle(), ((Ejercicio) entry).getSolution()));
                 } else {
@@ -332,6 +335,18 @@ public class Sistema implements Serializable {
 
     public boolean addSubforum(Subforo subforum) {
         return subforums.add(subforum);
+    }
+
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Sistema.class.getSimpleName() + "[", "]")
+                .add("users=" + users)
+                .add("currentUser=" + currentUser)
+                .add("subforums=" + subforums)
+                .add("activeSubforum=" + activeSubforum)
+                .add("currentDate=" + currentDate)
+                .toString();
     }
 }
 

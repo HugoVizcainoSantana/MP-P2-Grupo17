@@ -3,10 +3,11 @@ package mp.g17;
 
 import mp.g17.users.Administrador;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class Penalizacion {
+public class Penalizacion implements Serializable {
     public final static int DIAS_PENA = 2;
     private Calendar fechaInicio;
     private Calendar fechaFinal;

@@ -2,11 +2,12 @@ package mp.g17.posts;
 
 import mp.g17.users.Usuario;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Comentario implements IVotable, IDatable {
+public class Comentario implements IVotable, IDatable, Serializable {
 
     private Usuario createdBy;
     private String text;

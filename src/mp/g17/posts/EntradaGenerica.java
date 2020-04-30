@@ -2,13 +2,15 @@ package mp.g17.posts;
 
 import mp.g17.users.Usuario;
 
+import java.io.Serializable;
 import java.util.*;
 
-public abstract class EntradaGenerica implements IVotable, IDatable {
+public abstract class EntradaGenerica implements IVotable, IDatable, Serializable {
 
     private Usuario createdBy;
     private int points;
     private String title;
+    private String content;
 
     private boolean verified;
     private List<Comentario> commentList;
@@ -16,12 +18,17 @@ public abstract class EntradaGenerica implements IVotable, IDatable {
     private Date creationDate;
 
     public EntradaGenerica(Usuario createdBy, String title) {
+        this(createdBy, title, null);
+    }
+
+    public EntradaGenerica(Usuario createdBy, String title, String content) {
         this.createdBy = createdBy;
         this.points = 0;
         this.title = title;
+        this.content = content;
         this.commentList = new ArrayList<>();
         this.usersVotes = new HashMap<>();
-        creationDate= new Date();
+        creationDate = new Date();
     }
 
     public List<Comentario> getCommentList() {
@@ -73,5 +80,13 @@ public abstract class EntradaGenerica implements IVotable, IDatable {
 
     public Usuario getCreatedBy() {
         return createdBy;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

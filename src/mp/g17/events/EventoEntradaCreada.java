@@ -3,10 +3,11 @@ package mp.g17.events;
 import mp.g17.Subforo;
 import mp.g17.posts.EntradaGenerica;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.StringJoiner;
 
-public class EventoEntradaCreada {
+public class EventoEntradaCreada implements Serializable {
     public final Subforo subforo;
     public final EntradaGenerica post;
     public final Instant instant;
