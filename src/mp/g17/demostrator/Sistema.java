@@ -39,7 +39,9 @@ public class Sistema implements Serializable {
         try (FileInputStream file = new FileInputStream("forum.obj")) {
             try (ObjectInputStream input = new ObjectInputStream(file)) {
                 system = (Sistema) input.readObject();
-                LOGGER.info("Datos cargados correctamente");
+                LOGGER.info("Datos cargados correctamente. Fecha del backup:" + system.getCurrentDate().toString());
+                LOGGER.info("Cambiando fecha actual del sistema al momento actual");
+                system.currentDate = new GregorianCalendar();
                 LOGGER.info(system.toString());
             }
         } catch (Exception ex) {
@@ -55,6 +57,7 @@ public class Sistema implements Serializable {
             try (ObjectOutputStream output = new ObjectOutputStream(file)) {
                 system.currentUser = null;
                 system.activeSubforum = null;
+                system.currentDate = new GregorianCalendar();
                 output.writeObject(system);
                 return true;
             }
