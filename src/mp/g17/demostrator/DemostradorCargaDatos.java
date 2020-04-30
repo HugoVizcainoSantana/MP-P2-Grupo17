@@ -193,8 +193,8 @@ public class DemostradorCargaDatos {
         LOGGER.info("Vamos a hacer que un profesor vea los resultados de las encuestas");
         system.login("j.perez@urjc.es", "12345");
         Subforo subforumExamenes = system.chooseSubforum("Examenes");
-        Entrada encuesta_final = subforoExamenes.getPostByTitle("Encuesta final");
-        for (EntradaGenerica entradaEntrada : entrada.getEntradas()) {
+        Entrada encuesta_final = subforumExamenes.getPostByTitle("Encuesta final");
+        for (EntradaGenerica entradaEntrada : encuesta_final.getEntradas()) {
             Encuesta encuesta = (Encuesta) entradaEntrada;
             LOGGER.info("Viendo las respuestas de forma anonima");
             system.showSurveyResult(encuesta);
