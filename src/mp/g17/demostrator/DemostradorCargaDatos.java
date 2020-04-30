@@ -172,6 +172,7 @@ public class DemostradorCargaDatos {
         Subforo subforoExamenes = system.chooseSubforum("Examenes");
         Entrada entrada = subforoExamenes.getPostByTitle("Encuesta final");
         for (EntradaGenerica entradaEntrada : entrada.getEntradas()) {
+            // Se hace el casting directo por simplificar el codigo, pero habria que verificarlo con un instanceof
             Encuesta encuesta = (Encuesta) entradaEntrada;
             for (PreguntaEncuesta poll : encuesta.getPolls()) {
                 LOGGER.info("Primero vamos a intentar responder algo incorrecto");
@@ -195,6 +196,7 @@ public class DemostradorCargaDatos {
         Subforo subforumExamenes = system.chooseSubforum("Examenes");
         Entrada encuesta_final = subforumExamenes.getPostByTitle("Encuesta final");
         for (EntradaGenerica entradaEntrada : encuesta_final.getEntradas()) {
+            // Se hace el casting directo por simplificar el codigo, pero habria que verificarlo con un instanceof
             Encuesta encuesta = (Encuesta) entradaEntrada;
             LOGGER.info("Viendo las respuestas de forma anonima");
             system.showSurveyResult(encuesta);
