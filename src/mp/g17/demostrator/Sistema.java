@@ -290,6 +290,24 @@ public class Sistema implements Serializable {
         };
         LOGGER.fine(supplier);
     }
+    public void showComments(Entrada entrada){
+        Supplier<String> supplier = () -> {
+            StringBuilder sb = new StringBuilder();
+            sb.append("Listando Comentarios del post " + entrada.getTitle());
+            if (currentUser instanceof Alumno || currentUser instanceof Profesor) {
+                for (Comentario comentario : entrada.getCommentList()) { //Check with for if the user is in the forum
+                    if (entrada.getCommentList().size() == 0) {
+                        sb.append("\n\t").append("El  post seleccionado no tiene comentarios");
+                    } else {
+                        sb.append("\n\t").append(String.format(" %s : Comentario: %10s -> %s", comentario.getCreatedBy().getEmail(), comentario.getText(),comentario.getPoints()));
+                    }
+                }
+            }
+            return sb.toString();
+        };
+        LOGGER.fine(supplier);
+
+    }
 
     public void showSubforumSubscribed() { //Show the forums that a user is subscribed
         Supplier<String> supplier = () -> {

@@ -61,6 +61,7 @@ public class DemostradorGuardaDatos {
         if (system.getCurrentUser() instanceof Profesor) {
             system.addSubforum(system.createSubforo("Dudas"));
             system.addSubforum(system.createSubforo("Novedades"));
+            system.addSubforum(system.createSubforo("Preguntas practica"));
         }
         system.logout();
         system.login("jc.galdos@urjc.es", "12345");
@@ -103,6 +104,12 @@ public class DemostradorGuardaDatos {
                 entrada.add(ejercicio);
                 entrada.add(texto);
                 subforoPracticas.addNewEntry(entrada);
+                //Entry with different texts
+                entrada= new Entrada(system.getCurrentUser(),"Notas de la practica numero 1");
+                entrada.add(new TextoPlano(system.getCurrentUser()," Pedro -> 7"));
+                entrada.add(new TextoPlano(system.getCurrentUser(),"Borja -> 7"));
+                entrada.add(new TextoPlano(system.getCurrentUser(),"Alberto -> 8"));
+                subforoPracticas.addNewEntry(entrada);
             }
         }
         system.logout();
@@ -123,16 +130,24 @@ public class DemostradorGuardaDatos {
         }
 
         system.logout();
+
         system.showPosts(system.getActiveSubforum());
-
+        system.login("b.castro.2018@alumnos.urjc.es","12345");
         system.showInformationPost((system.chooseEntrada("Practica menor")));
-
+        system.showInformationPost((system.chooseEntrada("Notas de la practica numero 1")));
+        Comentario comentario = new Comentario(system.getCurrentUser(),"Ojala asi sean todas las practicas");
+        system.chooseEntrada("Practica menor").comment(comentario);
+        comentario = new Comentario(system.getCurrentUser(),"Buena practica") ;
+        system.chooseEntrada("Notas de la practica numero 1").comment(comentario);
+        system.showComments(system.chooseEntrada("Practica menor"));
+        system.logout();
         LOGGER.info("Procediendo a hacer un backup del sistema...");
         if (Sistema.save(system)) {
             LOGGER.info("Datos guardados correctamente");
         } else {
             LOGGER.severe("Error guardando los datos");
         }
+
 
 
     }
