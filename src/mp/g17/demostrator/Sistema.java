@@ -106,7 +106,7 @@ public class Sistema implements Serializable {
             if (subforo.getPosts().size() == 0) { //Check if a subforum is empty
                 sb.append("\n\t").append(String.format("El subforo %10s no tiene posts", subforo.getName()));
             } else {
-                sb.append("Los posts estan ordenados con la estrategia ").append(subforo.getSortingStrategy()).append(" ").append(subforo.getSortingStrategy().sortType);
+                sb.append(" Los posts estan ordenados con la estrategia ").append(subforo.getSortingStrategy().getClass().getSimpleName()).append(" ").append(subforo.getSortingStrategy().sortType);
                 for (EntradaGenerica post : subforo.getPosts()) {
                     sb.append("\n\t").append(String.format("Post %30s Creado: %20s-> Tiene %s votos(s)", post.getTitle(), post.getCreationDate(), post.getPoints()));
                 }

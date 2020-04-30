@@ -21,6 +21,10 @@ public abstract class EntradaGenerica implements IVotable, IDatable, Serializabl
     private Map<Usuario, Boolean> usersVotes;
     private Instant creationDate;
 
+    public void setCreationDate(Instant creationDate) {
+        this.creationDate = creationDate;
+    }
+
     public EntradaGenerica(Usuario createdBy, String title) {
         this(createdBy, title, null);
     }

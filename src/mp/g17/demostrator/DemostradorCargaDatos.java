@@ -94,7 +94,6 @@ public class DemostradorCargaDatos {
         }
         //Login with a stricker user
         if (system.login("b.castro.2018@alumnos.urjc.es", "12345")) {
-            ;
             system.setActiveSubforum(system.chooseSubforum("Preguntas practica"));
             LOGGER.info("Vamos a votar el post llamado prueba");
 
@@ -172,7 +171,7 @@ public class DemostradorCargaDatos {
             entryada.comment(coment);
             LOGGER.info("Vamos a votar el comentario");
             entryada.vote(true, system.getCurrentUser());
-            LOGGER.info("El comentario" + entryada + "tiene un total de: " + entryada.getPoints() + "puntos");
+            LOGGER.info("El comentario " + entryada.getTitle() + " tiene un total de: " + entryada.getPoints() + "puntos");
         }else{
             LOGGER.warning("No puedes hacer estas funcionalidades sin estar logueado");
         }

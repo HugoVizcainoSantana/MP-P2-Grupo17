@@ -6,6 +6,8 @@ import mp.g17.users.Administrador;
 import mp.g17.users.Profesor;
 import mp.g17.utils.LoggerUtils;
 
+import java.time.Instant;
+import java.util.Random;
 import java.util.logging.Logger;
 
 public class DemostradorGuardaDatos {
@@ -111,6 +113,13 @@ public class DemostradorGuardaDatos {
                     subforoPracticas.addNewEntry(entrada);
                     //Entry with different texts
                     entrada = new Entrada(system.getCurrentUser(), "Notas de la practica numero 1");
+                    try {
+                        // simular una fecha de creacion distinta con un delay
+                        Thread.sleep(new Random().nextInt(100));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    entrada.setCreationDate(Instant.now());
                     entrada.add(new TextoPlano(system.getCurrentUser(), " Pedro -> 7"));
                     entrada.add(new TextoPlano(system.getCurrentUser(), "Borja -> 7"));
                     entrada.add(new TextoPlano(system.getCurrentUser(), "Alberto -> 8"));
