@@ -21,6 +21,7 @@ import static org.junit.Assert.*;
 public class PenalizacionTest {
     
     public PenalizacionTest() {
+        Penalizacion p = new Penalizaacion;
     }
     
     @Before
@@ -36,13 +37,6 @@ public class PenalizacionTest {
      */
     @Test
     public void testGetFechaInicio() {
-        System.out.println("getFechaInicio");
-        Penalizacion instance = null;
-        Calendar expResult = null;
-        Calendar result = instance.getFechaInicio();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -50,13 +44,6 @@ public class PenalizacionTest {
      */
     @Test
     public void testGetFechaFinal() {
-        System.out.println("getFechaFinal");
-        Penalizacion instance = null;
-        Calendar expResult = null;
-        Calendar result = instance.getFechaFinal();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -64,13 +51,6 @@ public class PenalizacionTest {
      */
     @Test
     public void testGetPenalizedBy() {
-        System.out.println("getPenalizedBy");
-        Penalizacion instance = null;
-        Administrador expResult = null;
-        Administrador result = instance.getPenalizedBy();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -78,13 +58,6 @@ public class PenalizacionTest {
      */
     @Test
     public void testGetReason() {
-        System.out.println("getReason");
-        Penalizacion instance = null;
-        String expResult = "";
-        String result = instance.getReason();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
     
 }

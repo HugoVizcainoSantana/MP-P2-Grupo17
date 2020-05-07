@@ -36,27 +36,19 @@ public class AdministradorTest {
      */
     @Test
     public void testPenalizarUsuario() {
-        System.out.println("penalizarUsuario");
-        Alumno alumno = null;
-        String reason = "";
-        Administrador instance = null;
-        instance.penalizarUsuario(alumno, reason);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+        Alumno u = new Alumno ;
+        Administrador admin = new Administrador;
+        admin.penalizarUsuario(u,comportamiento);
+        assertTrue(u.getStrike());
 
-    /**
-     * Test of verify method, of class Administrador.
-     */
+    }
     @Test
     public void testVerify() {
-        System.out.println("verify");
-        Entrada entrada = null;
-        boolean resultado = false;
-        Administrador instance = null;
-        instance.verify(entrada, resultado);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Administrador admin = new Administrador;
+        Entrada e = new Entrada;
+        admin.Verify(e,true);
+        assertTrue(e.isVerified);
+
     }
 
     /**
@@ -64,12 +56,13 @@ public class AdministradorTest {
      */
     @Test
     public void testUpdatePosts() {
-        System.out.println("updatePosts");
-        Subforo subforo = null;
-        Administrador instance = null;
-        instance.updatePosts(subforo);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Subforo sub = new Subforo;
+        Administrador admin = new Administrador;
+        Entrada e = new Entrada;
+        admin.Verify(e,true);
+        sub.postUnverified.add(e);
+        admin.updatePosts(sub);
+        assetEquals(1, sub.posts.size());
     }
     
 }
