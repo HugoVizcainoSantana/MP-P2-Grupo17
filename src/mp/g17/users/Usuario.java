@@ -20,7 +20,8 @@ public abstract class Usuario implements IObserver<EventoEntradaCreada>, Seriali
     protected String password;
     protected List<Subforo> suscribedSubforos; //List that saves in which forums are the user subscribed
     protected List<EntradaGenerica> createdEntradas;
-    private static Logger LOGGER = Sistema.LOGGER;
+    private static final Logger LOGGER = Sistema.LOGGER;
+    protected List<EventoEntradaCreada> notifications;
 
 
     public Usuario(String firstname, String lastname, String alias, String email, String password) {//Constructor for a general user
@@ -29,8 +30,9 @@ public abstract class Usuario implements IObserver<EventoEntradaCreada>, Seriali
         this.alias = alias;
         this.email = email;
         this.password = password;
-        this.suscribedSubforos= new ArrayList<>();
-        this.createdEntradas= new ArrayList<>();
+        this.suscribedSubforos = new ArrayList<>();
+        this.createdEntradas = new ArrayList<>();
+        this.notifications = new ArrayList<>();
     }
 
     public String getFirstname() {
@@ -129,6 +131,11 @@ public abstract class Usuario implements IObserver<EventoEntradaCreada>, Seriali
     @Override
     public void update(EventoEntradaCreada event) {
         LOGGER.info("Se ha creado una nueva entrada. " + event.toString());
+        notifications.add(event);
+    }
+
+    public int getNumberNotifications() {
+        return notifications.size();
     }
 
 }

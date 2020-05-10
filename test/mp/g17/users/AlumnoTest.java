@@ -5,70 +5,32 @@
  */
 package mp.g17.users;
 
-import mp.g17.Penalizacion;
+import mp.g17.Subforo;
 import mp.g17.events.EventoEntradaCreada;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import mp.g17.posts.Entrada;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  *
  * @author usuario
  */
 public class AlumnoTest {
-    
-    public AlumnoTest() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
 
     /**
      * Test of update method, of class Alumno.
      */
     @Test
     public void testUpdate() {
-        System.out.println("update");
-        EventoEntradaCreada event = null;
-        Alumno instance = null;
-        instance.update(event);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Profesor prof = new Profesor("Jose", "Perez", "", "j.perez@.urjc.es", "12345");
+        Subforo posts = new Subforo(prof, "Novedades");
+        Alumno alum = new Alumno("Sergio", "Sarria", "sarry150", "s.sarria@alumnos.urjc.es", "12345");
+        Entrada entry = new Entrada(alum, "Ejercicios");
+        EventoEntradaCreada event = new EventoEntradaCreada(posts, entry);
+        alum.update(event);
+        int resultado = 1;
+        assertTrue(alum.getNumberNotifications() == resultado);
     }
 
-    /**
-     * Test of getStrike method, of class Alumno.
-     */
-    @Test
-    public void testGetStrike() {
-        System.out.println("getStrike");
-        Alumno instance = null;
-        Penalizacion expResult = null;
-        Penalizacion result = instance.getStrike();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setStrike method, of class Alumno.
-     */
-    @Test
-    public void testSetStrike() {
-        System.out.println("setStrike");
-        Penalizacion strike = null;
-        Alumno instance = null;
-        instance.setStrike(strike);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-    
 }

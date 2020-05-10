@@ -5,31 +5,15 @@
  */
 package mp.g17;
 
-import java.util.Calendar;
-import mp.g17.users.Administrador;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
  * @author usuario
  */
 public class PenalizacionTest {
-    
+
     public PenalizacionTest() {
-        Penalizacion p = new Penalizaacion;
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
     }
 
     /**
@@ -59,5 +43,5 @@ public class PenalizacionTest {
     @Test
     public void testGetReason() {
     }
-    
+
 }

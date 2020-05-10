@@ -5,29 +5,15 @@
  */
 package mp.g17.posts;
 
-import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
  * @author usuario
  */
 public class EntradaTest {
-    
+
     public EntradaTest() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
     }
 
     /**
@@ -35,12 +21,6 @@ public class EntradaTest {
      */
     @Test
     public void testVerify() {
-        System.out.println("verify");
-        boolean resultado = false;
-        Entrada instance = null;
-        instance.verify(resultado);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -48,12 +28,6 @@ public class EntradaTest {
      */
     @Test
     public void testSetEntradas() {
-        System.out.println("setEntradas");
-        List<EntradaGenerica> entradas = null;
-        Entrada instance = null;
-        instance.setEntradas(entradas);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -61,12 +35,6 @@ public class EntradaTest {
      */
     @Test
     public void testSetVerified() {
-        System.out.println("setVerified");
-        boolean verified = false;
-        Entrada instance = null;
-        instance.setVerified(verified);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -74,13 +42,6 @@ public class EntradaTest {
      */
     @Test
     public void testIsVerified() {
-        System.out.println("isVerified");
-        Entrada instance = null;
-        boolean expResult = false;
-        boolean result = instance.isVerified();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -88,12 +49,6 @@ public class EntradaTest {
      */
     @Test
     public void testAdd() {
-        System.out.println("add");
-        EntradaGenerica entry = null;
-        Entrada instance = null;
-        instance.add(entry);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -101,13 +56,6 @@ public class EntradaTest {
      */
     @Test
     public void testGetEntradas() {
-        System.out.println("getEntradas");
-        Entrada instance = null;
-        List<EntradaGenerica> expResult = null;
-        List<EntradaGenerica> result = instance.getEntradas();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
-    
+
 }
