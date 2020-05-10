@@ -105,6 +105,9 @@ public class Subforo implements IObservable<EventoEntradaCreada>, Serializable {
         }
         return null;
     }
+    public int getNumberOfVerfiedPosts(){
+        return posts.size();
+    }
 
 
     @Override
