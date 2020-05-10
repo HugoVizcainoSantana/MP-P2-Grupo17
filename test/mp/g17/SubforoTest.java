@@ -6,14 +6,13 @@
 package mp.g17;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
  * @author usuario
  */
 public class SubforoTest {
-    
+
     public SubforoTest() {
     }
 
@@ -121,5 +120,5 @@ public class SubforoTest {
     @Test
     public void testToString() {
     }
-    
+
 }
