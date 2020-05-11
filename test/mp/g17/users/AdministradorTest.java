@@ -7,10 +7,12 @@ package mp.g17.users;
 
 import mp.g17.Subforo;
 import mp.g17.posts.Entrada;
+import org.junit.After;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import org.junit.Before;
 
 /**
  *
@@ -21,9 +23,14 @@ public class AdministradorTest {
     public AdministradorTest() {
     }
 
-    /**
-     * Test of penalizarUsuario method, of class Administrador.
-     */
+    @Before
+    public void testBefore(){
+        System.out.println("Hola");
+    }
+    @After
+    public void testAfter(){
+        System.out.println("Adios");
+    }
     @Test
     public void testPenalizarUsuario() {
         Alumno alum = new Alumno("Sergio", "Sarria", "sarry150", "s.sarria@alumnos.urjc.es", "12345");

@@ -5,6 +5,10 @@
  */
 package mp.g17.users;
 
+import mp.g17.Subforo;
+import mp.g17.events.EventoEntradaCreada;
+import mp.g17.posts.Entrada;
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
@@ -21,6 +25,13 @@ public class ProfesorTest {
      */
     @Test
     public void testUpdate() {
+        Profesor prof = new Profesor("Jose", "Perez", "", "j.perez@.urjc.es", "12345");
+        Subforo posts = new Subforo(prof, "Novedades");
+        Entrada entry = new Entrada(prof, "Ejercicios");
+        EventoEntradaCreada event = new EventoEntradaCreada(posts, entry);
+        prof.update(event);
+        int resultado = 1;
+        assertEquals(prof.getNumberNotifications(), resultado);
     }
 
 }
