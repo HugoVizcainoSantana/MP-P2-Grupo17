@@ -70,6 +70,13 @@ public class Subforo implements IObservable<EventoEntradaCreada>, Serializable {
     public List<IObserver<EventoEntradaCreada>> getObservers() { //This method returns the users subscribed in the subforum
         return usersForo;
     }
+    public int getNumberObservers(){
+        return usersForo.size();
+    }
+    
+    public int getNumberEntries(){
+        return postUnverified.size();
+    }
 
     public List<Entrada> getPosts() {
         this.posts = sortingStrategy.sort(this.posts);

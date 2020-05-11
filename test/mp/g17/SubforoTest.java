@@ -5,6 +5,11 @@
  */
 package mp.g17;
 
+import mp.g17.posts.Entrada;
+import mp.g17.users.Profesor;
+import org.junit.After;
+import static org.junit.Assert.*;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -15,33 +20,20 @@ public class SubforoTest {
 
     public SubforoTest() {
     }
-
-    /**
-     * Test of getSortingStrategy method, of class Subforo.
-     */
-    @Test
-    public void testGetSortingStrategy() {
+    @Before
+    public void testBefore(){
+        System.out.println("Hola");
     }
-
-    /**
-     * Test of getName method, of class Subforo.
-     */
-    @Test
-    public void testGetName() {
+    @After
+    public void testAfter(){
+        System.out.println("Adios");
     }
-
-    /**
-     * Test of setName method, of class Subforo.
-     */
-    @Test
-    public void testSetName() {
-    }
-
-    /**
-     * Test of addUser method, of class Subforo.
-     */
     @Test
     public void testAddUser() {
+        Profesor prof = new Profesor("Jose", "Perez", "", "j.perez@.urjc.es", "12345");
+        Subforo sub = new Subforo(prof, "Profesores");
+        sub.addUser(prof);
+        assertTrue(sub.getNumberObservers() == 1);
     }
 
     /**
@@ -49,6 +41,11 @@ public class SubforoTest {
      */
     @Test
     public void testAddNewEntry() {
+        Profesor prof = new Profesor("Jose", "Perez", "", "j.perez@.urjc.es", "12345");
+        Subforo sub = new Subforo(prof, "Profesores");
+        Entrada entry = new Entrada(prof, "Ejercicios");
+        sub.addNewEntry(entry);
+        assertTrue(sub.getNumberEntries() == 1);
     }
 
     /**
@@ -56,6 +53,13 @@ public class SubforoTest {
      */
     @Test
     public void testDeleteUser() {
+        Profesor prof = new Profesor("Jose", "Perez", "", "j.perez@.urjc.es", "12345");
+        Subforo sub = new Subforo(prof, "Profesores");
+        sub.addUser(prof);
+        System.out.println("Numero de miembros en el foro: " + sub.getNumberObservers());
+        sub.deleteUser(prof);
+        System.out.println("Numero de miembros en el foro: " + sub.getNumberObservers());
+        assertTrue(sub.getNumberObservers() == 0);
     }
 
     /**
@@ -63,62 +67,17 @@ public class SubforoTest {
      */
     @Test
     public void testDeleteInput() {
-    }
-
-    /**
-     * Test of getPostUnverified method, of class Subforo.
-     */
-    @Test
-    public void testGetPostUnverified() {
-    }
-
-    /**
-     * Test of getObservers method, of class Subforo.
-     */
-    @Test
-    public void testGetObservers() {
-    }
-
-    /**
-     * Test of getPosts method, of class Subforo.
-     */
-    @Test
-    public void testGetPosts_0args() {
-    }
-
-    /**
-     * Test of getPosts method, of class Subforo.
-     */
-    @Test
-    public void testGetPosts_ASortingStrategy() {
-    }
-
-    /**
-     * Test of setSortingStrategy method, of class Subforo.
-     */
-    @Test
-    public void testSetSortingStrategy() {
-    }
-
-    /**
-     * Test of setVerifiedInVisiblePosts method, of class Subforo.
-     */
-    @Test
-    public void testSetVerifiedInVisiblePosts() {
-    }
-
-    /**
-     * Test of getPostByTitle method, of class Subforo.
-     */
-    @Test
-    public void testGetPostByTitle() {
-    }
-
-    /**
-     * Test of toString method, of class Subforo.
-     */
-    @Test
-    public void testToString() {
+        Profesor prof = new Profesor("Jose", "Perez", "", "j.perez@.urjc.es", "12345");
+        Subforo sub = new Subforo(prof, "Profesores");
+        Entrada entry = new Entrada(prof, "Ejercicios");
+        sub.addNewEntry(entry);
+        System.out.println("Numero de entradas en el foro: " + sub.getNumberEntries());
+        sub.setVerifiedInVisiblePosts();
+        System.out.println("Numero de entradas verificadas en el foro: " + sub.getNumberEntries());
+        sub.deleteInput(entry);
+        System.out.println("Numero de entradas en el foro: " + sub.getNumberEntries());
+        System.out.println("Numero de entradas verificadas en el foro: " + sub.getNumberOfVerfiedPosts());
+        assertTrue(sub.getNumberOfVerfiedPosts() == 0);
     }
 
 }
