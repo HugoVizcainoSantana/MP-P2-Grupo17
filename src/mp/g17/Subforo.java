@@ -18,11 +18,11 @@ import java.util.StringJoiner;
 
 public class Subforo implements IObservable<EventoEntradaCreada>, Serializable {
     public static final ASortingStrategy DEFAULT_SORT = new SortByPointsStrategy(SortType.DESCENDING);
-    private Profesor createdBy;
+    private final Profesor createdBy;
     private String name;
-    private List<IObserver<EventoEntradaCreada>> usersForo;
+    private final List<IObserver<EventoEntradaCreada>> usersForo;
     private List<Entrada> posts;
-    private List<Entrada> postUnverified; //List of post not verified yet
+    private final List<Entrada> postUnverified; //List of post not verified yet
     private ASortingStrategy sortingStrategy;
 
     public ASortingStrategy getSortingStrategy() {
@@ -70,6 +70,13 @@ public class Subforo implements IObservable<EventoEntradaCreada>, Serializable {
     public List<IObserver<EventoEntradaCreada>> getObservers() { //This method returns the users subscribed in the subforum
         return usersForo;
     }
+    public int getNumberObservers(){
+        return usersForo.size();
+    }
+    
+    public int getNumberEntries(){
+        return postUnverified.size();
+    }
 
     public List<Entrada> getPosts() {
         this.posts = sortingStrategy.sort(this.posts);
@@ -104,6 +111,10 @@ public class Subforo implements IObservable<EventoEntradaCreada>, Serializable {
                 return post;
         }
         return null;
+    }
+
+    public int getNumberOfVerfiedPosts() {
+        return posts.size();
     }
 
 
