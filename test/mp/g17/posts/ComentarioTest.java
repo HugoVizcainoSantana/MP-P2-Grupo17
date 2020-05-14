@@ -5,71 +5,41 @@
  */
 package mp.g17.posts;
 
+import mp.g17.users.Alumno;
+import mp.g17.users.Usuario;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 /**
- *
  * @author usuario
  */
 public class ComentarioTest {
 
+    private final Usuario userTest1;
+    private final Usuario userTest2;
+    private final Usuario userTest3;
+
     public ComentarioTest() {
+        userTest1 = new Alumno("Hugo", "Vizcaino", "hvizcaino", "hugo@urjc.es", "1234");
+        userTest2 = new Alumno("Hugo2", "Vizcaino2", "hvizcaino2", "hugo2@urjc.es", "1234");
+        userTest3 = new Alumno("Hugo3", "Vizcaino3", "hvizcaino3", "hugo3@urjc.es", "1234");
     }
 
     /**
-     * Test of getText method, of class Comentario.
+     * Test of getVotes method, of class Comentario, inherited default implementation from interface.
      */
     @Test
-    public void testGetText() {
-    }
-
-    /**
-     * Test of setText method, of class Comentario.
-     */
-    @Test
-    public void testSetText() {
-    }
-
-    /**
-     * Test of getUsersVotes method, of class Comentario.
-     */
-    @Test
-    public void testGetUsersVotes() {
-    }
-
-    /**
-     * Test of getPoints method, of class Comentario.
-     */
-    @Test
-    public void testGetPoints() {
-    }
-
-    /**
-     * Test of setPoints method, of class Comentario.
-     */
-    @Test
-    public void testSetPoints() {
-    }
-
-    /**
-     * Test of getCreationDate method, of class Comentario.
-     */
-    @Test
-    public void testGetCreationDate() {
-    }
-
-    /**
-     * Test of getCreatedBy method, of class Comentario.
-     */
-    @Test
-    public void testGetCreatedBy() {
-    }
-
-    /**
-     * Test of setCreatedBy method, of class Comentario.
-     */
-    @Test
-    public void testSetCreatedBy() {
+    public void testVotes() {
+        Comentario comment = new Comentario(userTest1, "Viva la programacion!");
+        comment.vote(true, userTest1);
+        assertEquals(1, comment.getPoints());
+        comment.vote(false, userTest2);
+        assertEquals(0, comment.getPoints());
+        comment.vote(false, userTest3);
+        assertEquals(-1, comment.getPoints());
+        comment.vote(true, userTest2);
+        assertEquals(1, comment.getPoints());
     }
 
 }
