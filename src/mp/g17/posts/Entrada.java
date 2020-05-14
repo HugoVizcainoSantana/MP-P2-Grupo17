@@ -27,14 +27,17 @@ public class Entrada extends EntradaGenerica {
         return verified;
     }
 
-    public void add(EntradaGenerica entry){
-    entradas.add(entry);
-}
+    public void add(EntradaGenerica entry) {
+        entradas.add(entry);
+    }
 
     public List<EntradaGenerica> getEntradas() {
         return entradas;
-
     }
 
-
+    @Override
+    public void vote(Boolean valor, Usuario userVoting) {
+        if (!userVoting.equals(this.getCreatedBy()))
+            super.vote(valor, userVoting);
+    }
 }
