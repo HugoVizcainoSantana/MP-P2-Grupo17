@@ -5,7 +5,10 @@
  */
 package mp.g17.posts;
 
+import mp.g17.users.Profesor;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  *
@@ -21,13 +24,9 @@ public class EjercicioTest {
      */
     @Test
     public void testGetSolution() {
-    }
-
-    /**
-     * Test of setSolution method, of class Ejercicio.
-     */
-    @Test
-    public void testSetSolution() {
+        Profesor profesor = new Profesor("profe1", "ape1", "profeMolon", "profemolon@urjc.es", "asereje");
+        Ejercicio ejercicio = new Ejercicio(profesor, "¿Que lenguaje usamos en MP?", "Java");
+        assertEquals(ejercicio.getSolution(), "Java");
     }
 
 }
