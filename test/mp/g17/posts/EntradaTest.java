@@ -50,7 +50,12 @@ public class EntradaTest {
      */
     @Test
     public void testAdd() {
-
+        Entrada entry = new Entrada(userTest1, "Viva la programacion!");
+        TextoPlano textoPlano = new TextoPlano(userTest1, "Asereje ja deje dejedetuvejede semiunova");
+        TextoPlano textoPlano2 = new TextoPlano(userTest1, "Guahavi guadeni wididipi");
+        entry.add(textoPlano);
+        entry.add(textoPlano2);
+        assertEquals(2, entry.getEntradas().size());
     }
 
     @Test
