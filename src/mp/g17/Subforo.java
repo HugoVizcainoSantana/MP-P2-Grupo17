@@ -12,7 +12,9 @@ import mp.g17.users.Profesor;
 import mp.g17.users.Usuario;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -85,6 +87,9 @@ public class Subforo implements IObservable<EventoEntradaCreada>, Serializable {
 
     public List<Entrada> getPosts(ASortingStrategy sortingStrategy) { //This method returns the list of posts sorted by a strategy sorting
         this.sortingStrategy = sortingStrategy;
+        for (int i=0; i <= posts.size() -1; i++){
+        System.out.println(posts.get(i).getCreationDate());
+        }
         posts = sortingStrategy.sort(this.posts);
         return getPosts();
     }
