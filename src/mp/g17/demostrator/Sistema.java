@@ -26,7 +26,7 @@ public class Sistema implements Serializable {
     private Subforo activeSubforum;
     private Calendar currentDate;
 
-    private Sistema() {
+    public Sistema() {
         users = new HashMap<>();
         currentUser = null;
         subforums = new ArrayList<>();
@@ -200,7 +200,7 @@ public class Sistema implements Serializable {
         return true;
     }
 
-    public void showInformationPost(Entrada entrada) {
+    public boolean showInformationPost(Entrada entrada) {
         Supplier<String> supplier = () -> {
             StringBuilder sb = new StringBuilder();
             sb.append("Listando Informacion Detalla Post ").append(entrada.getTitle());
@@ -218,6 +218,7 @@ public class Sistema implements Serializable {
             return sb.toString();
         };
         LOGGER.fine(supplier);
+        return true;
 
     }
 
@@ -261,7 +262,7 @@ public class Sistema implements Serializable {
 
     }
 
-    public void showRegisteredUsers() { //Method that shows all the users registered in the system by mail
+    public boolean showRegisteredUsers() { //Method that shows all the users registered in the system by mail
         Supplier<String> supplier = () -> {
             StringBuilder sb = new StringBuilder();
             sb.append("Listando Usuarios Registrados...");
@@ -273,9 +274,10 @@ public class Sistema implements Serializable {
             return sb.toString();
         };
         LOGGER.fine(supplier);
+        return true;
     }
 
-    public void showSubforumsAvaliables() { //Method that shows all the subforums created in the system
+    public boolean showSubforumsAvaliables() { //Method that shows all the subforums created in the system
         Supplier<String> supplier = () -> {
             StringBuilder sb = new StringBuilder();
             sb.append("Listando Subforos Disponibles...");
@@ -289,8 +291,9 @@ public class Sistema implements Serializable {
             return sb.toString();
         };
         LOGGER.fine(supplier);
+        return true;
     }
-    public void showComments(Entrada entrada){
+    public boolean showComments(Entrada entrada){
         Supplier<String> supplier = () -> {
             StringBuilder sb = new StringBuilder();
             sb.append("Listando Comentarios del post " + entrada.getTitle());
@@ -306,10 +309,11 @@ public class Sistema implements Serializable {
             return sb.toString();
         };
         LOGGER.fine(supplier);
+        return true;
 
     }
 
-    public void showSubforumSubscribed() { //Show the forums that a user is subscribed
+    public boolean showSubforumSubscribed() { //Show the forums that a user is subscribed
         Supplier<String> supplier = () -> {
             StringBuilder sb = new StringBuilder();
             sb.append("Listando Subforos Subscritos del usuario activo");
@@ -322,6 +326,7 @@ public class Sistema implements Serializable {
             return sb.toString();
         };
         LOGGER.fine(supplier);
+        return true;
     }
 
     public Subforo chooseSubforum(String name) { //Method to choose a subforum by name
@@ -371,7 +376,7 @@ public class Sistema implements Serializable {
                 .toString();
     }
 
-    public void showSurveyResult(Encuesta encuesta, boolean showUsernames) {
+    public boolean showSurveyResult(Encuesta encuesta, boolean showUsernames) {
         if (showUsernames) {
             Map<String, Map<Usuario, String>> resultado_encuesta = encuesta.getAllAnswers();
             resultado_encuesta.forEach((pregunta, resultados) -> {
@@ -385,10 +390,12 @@ public class Sistema implements Serializable {
                 resultados.forEach((respuesta, numVotos) -> LOGGER.info("\tRespuesta:" + respuesta + " | Veces votado: " + numVotos));
             });
         }
+        return true;
     }
 
-    public void showSurveyResult(Encuesta encuesta) {
+    public boolean showSurveyResult(Encuesta encuesta) {
         showSurveyResult(encuesta, false);
+        return true;
     }
 
     private void sleep() {
